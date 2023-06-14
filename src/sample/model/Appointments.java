@@ -12,14 +12,15 @@ public class Appointments {
     private String type;
     private LocalDateTime start;
     private LocalDateTime end;
-    private LocalDateTime createDate;
-    private String createdBy;
-    private Timestamp lastUpdate;
-    private String lastUpdateBy;
+    //private LocalDateTime createDate;
+    //private String createdBy;
+    //private Timestamp lastUpdate;
+    //private String lastUpdateBy;
     private int customerId;
+    private int userId;
     private int contactId;
 
-    public Appointments(int appointmentId, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, LocalDateTime createDate, String createdBy, Timestamp lastUpdate, String lastUpdateBy, int customerId, int contactId) {
+    public Appointments(int appointmentId, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, int customerId, int userId, int contactId) {
         this.appointmentId = appointmentId;
         this.title = title;
         this.description = description;
@@ -27,11 +28,8 @@ public class Appointments {
         this.type = type;
         this.start = start;
         this.end = end;
-        this.createDate = createDate;
-        this.createdBy = createdBy;
-        this.lastUpdate = lastUpdate;
-        this.lastUpdateBy = lastUpdateBy;
         this.customerId = customerId;
+        this.userId = userId;
         this.contactId = contactId;
     }
 
@@ -91,38 +89,6 @@ public class Appointments {
         this.end = end;
     }
 
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Timestamp getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(Timestamp lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
-
-    public String getLastUpdateBy() {
-        return lastUpdateBy;
-    }
-
-    public void setLastUpdateBy(String lastUpdateBy) {
-        this.lastUpdateBy = lastUpdateBy;
-    }
-
     public int getCustomerId() {
         return customerId;
     }
@@ -130,6 +96,10 @@ public class Appointments {
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
     }
+
+    public int getUserId(){ return userId; }
+
+    public void setUserId(int userId){ this.userId = userId; }
 
     public int getContactId() {
         return contactId;

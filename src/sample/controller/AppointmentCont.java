@@ -7,55 +7,59 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import sample.dao.AppointmentsDAO;
+import sample.model.Appointments;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 public class AppointmentCont implements Initializable {
 
     @FXML
-    private TableColumn<?, ?> ApptIdCol;
+    private TableColumn<Appointments, Integer> appointmentIdCol;
 
     @FXML
-    private TableView<?> allApptTV;
+    private TableView<Appointments> appointmentsTableView;
 
     @FXML
-    private TextField appointmentTxt;
+    private TextField appointmentIdTxt;
 
     @FXML
-    private ComboBox<?> contactCB;
+    private ComboBox<Integer> contactIdCB;
 
     @FXML
-    private TableColumn<?, ?> contactCol;
+    private TableColumn<Appointments, Integer> contactIdCol;
 
     @FXML
-    private TableColumn<?, ?> customerIdCol;
+    private TableColumn<Appointments, Integer> customerIdCol;
 
     @FXML
     private TextField customerIdTxt;
 
     @FXML
-    private TableColumn<?, ?> descriptionCol;
+    private TableColumn<Appointments, String> descriptionCol;
 
     @FXML
     private TextField descriptionTxt;
 
     @FXML
-    private TableColumn<?, ?> endCol;
+    private TableColumn<Appointments, LocalDateTime> endCol;
 
     @FXML
     private TextField endTxt;
 
     @FXML
-    private TableColumn<?, ?> locationCol;
+    private TableColumn<Appointments, String> locationCol;
 
     @FXML
     private TextField locationTxt;
 
     @FXML
-    private TableColumn<?, ?> startCol;
+    private TableColumn<Appointments, LocalDateTime> startCol;
 
     @FXML
     private TextField startTxt;
@@ -64,25 +68,43 @@ public class AppointmentCont implements Initializable {
     private ToggleGroup tableViewTG;
 
     @FXML
-    private TableColumn<?, ?> titleCol;
+    private TableColumn<Appointments, String> titleCol;
 
     @FXML
     private TextField titleTxt;
 
     @FXML
-    private TableColumn<?, ?> typeCol;
+    private TableColumn<Appointments, String> typeCol;
 
     @FXML
     private TextField typeTxt;
 
     @FXML
-    private TableColumn<?, ?> userIdCol;
+    private TableColumn<Appointments, Integer> userIdCol;
 
     @FXML
     private TextField userIdTxt;
 
     @FXML
     private Button menuBtt;
+
+    @FXML
+    void allAppointmentAction(ActionEvent event) {
+        appointmentsTableView.getItems().clear();
+        appointmentsTableView.setItems(AppointmentsDAO.getAllAppointments());
+    }
+
+    @FXML
+    void byMonthAction(ActionEvent event) {
+        appointmentsTableView.getItems().clear();
+        appointmentsTableView.setItems(AppointmentsDAO.getByMonthAppointments());
+    }
+
+    @FXML
+    void byWeekAction(ActionEvent event) {
+        appointmentsTableView.getItems().clear();
+        appointmentsTableView.setItems(AppointmentsDAO.getByWeekAppointments());
+    }
 
     @FXML
     void addAction(ActionEvent event) {
@@ -111,6 +133,19 @@ public class AppointmentCont implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        appointmentsTableView.setItems(AppointmentsDAO.getAllAppointments());
+
+        appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        startCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        endCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        userIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        contactIdCol.setCellValueFactory(new PropertyValueFactory<>("contactId"));
 
     }
 
