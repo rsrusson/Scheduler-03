@@ -15,7 +15,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("view/login.fxml"));
         primaryStage.setTitle("Scheduler Application");
-        primaryStage.setScene(new Scene(root, 500, 500));
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 

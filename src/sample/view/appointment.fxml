@@ -16,8 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.AppointmentCont">
    <children>
       <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="540.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -96,7 +95,7 @@
             <Button mnemonicParsing="false" onAction="#deleteAction" text="Delete" />
          </children>
       </HBox>
-      <Button layoutX="392.0" layoutY="430.0" mnemonicParsing="false" onAction="#menuAction" text="Menu" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="160.0" />
+      <Button fx:id="menuBtt" layoutX="392.0" layoutY="430.0" mnemonicParsing="false" onAction="#menuAction" text="Menu" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="160.0" />
       <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0" AnchorPane.bottomAnchor="490.0" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0">
          <children>
             <RadioButton mnemonicParsing="false" selected="true" text="All Appointments">
