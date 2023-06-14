@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.Login">
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.LoginCont">
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
@@ -36,7 +36,7 @@
                   <TextField fx:id="usernameTxt" />
                   <Label fx:id="passwordLbl" text="Password: " />
                   <TextField fx:id="passwordTxt" />
-                  <Button fx:id="loginBtt" mnemonicParsing="false" text="Login">
+                  <Button fx:id="loginBtt" mnemonicParsing="false" onAction="#loginAction" text="Login">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
@@ -53,7 +53,7 @@
                   <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                </padding>
             </VBox>
-            <Button fx:id="exitBtt" layoutX="398.0" layoutY="326.0" mnemonicParsing="false" text="Exit" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="50.0" />
+            <Button fx:id="exitBtt" layoutX="398.0" layoutY="326.0" mnemonicParsing="false" onAction="#exitAction" text="Exit" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="50.0" />
          </children></AnchorPane>
    </children>
 </GridPane>
