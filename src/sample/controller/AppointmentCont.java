@@ -14,6 +14,7 @@ import sample.model.Appointments;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
@@ -89,21 +90,38 @@ public class AppointmentCont implements Initializable {
     private Button menuBtt;
 
     @FXML
-    void allAppointmentAction(ActionEvent event) {
+    private RadioButton allAppointmentBtt;
+
+    @FXML
+    private RadioButton byMonthBtt;
+
+    @FXML
+    private RadioButton byWeekBtt;
+
+    private Appointments appointmentSelected = appointmentsTableView.getSelectionModel().getSelectedItem();
+
+    @FXML
+    void allAppointmentAction(ActionEvent event) throws SQLException {
         appointmentsTableView.getItems().clear();
+        AppointmentsDAO.setAllAppointments();
         appointmentsTableView.setItems(AppointmentsDAO.getAllAppointments());
+        appointmentsTableView.refresh();
     }
 
     @FXML
-    void byMonthAction(ActionEvent event) {
+    void byMonthAction(ActionEvent event) throws SQLException {
         appointmentsTableView.getItems().clear();
+        AppointmentsDAO.setByMonthAppointments();
         appointmentsTableView.setItems(AppointmentsDAO.getByMonthAppointments());
+        appointmentsTableView.refresh();
     }
 
     @FXML
-    void byWeekAction(ActionEvent event) {
+    void byWeekAction(ActionEvent event) throws SQLException {
         appointmentsTableView.getItems().clear();
+        AppointmentsDAO.setByWeekAppointments();
         appointmentsTableView.setItems(AppointmentsDAO.getByWeekAppointments());
+        appointmentsTableView.refresh();
     }
 
     @FXML
@@ -134,6 +152,12 @@ public class AppointmentCont implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        try {
+            AppointmentsDAO.setAllAppointments();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
         appointmentsTableView.setItems(AppointmentsDAO.getAllAppointments());
 
         appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
@@ -146,6 +170,19 @@ public class AppointmentCont implements Initializable {
         customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         userIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
         contactIdCol.setCellValueFactory(new PropertyValueFactory<>("contactId"));
+
+        if (appointmentSelected != null) {
+            appointmentIdTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
+            titleTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
+            descriptionTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
+            locationTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
+            typeTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
+            startTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
+            endTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
+            customerIdTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
+            userIdTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
+            contactIdCB.commitValue(String.valueOf(appointmentSelected.getAppointmentId()));
+        }
 
     }
 

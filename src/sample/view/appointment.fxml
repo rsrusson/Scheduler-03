@@ -98,13 +98,13 @@
       <Button fx:id="menuBtt" layoutX="392.0" layoutY="430.0" mnemonicParsing="false" onAction="#menuAction" text="Menu" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="160.0" />
       <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0" AnchorPane.bottomAnchor="490.0" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0">
          <children>
-            <RadioButton mnemonicParsing="false" onAction="#allAppointmentAction" selected="true" text="All Appointments">
+            <RadioButton fx:id="allAppointmentBtt" mnemonicParsing="false" onAction="#allAppointmentAction" selected="true" text="All Appointments">
                <toggleGroup>
                   <ToggleGroup fx:id="tableViewTG" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton mnemonicParsing="false" onAction="#byMonthAction" text="By Month" toggleGroup="$tableViewTG" />
-            <RadioButton mnemonicParsing="false" onAction="#byWeekAction" text="By Week" toggleGroup="$tableViewTG" />
+            <RadioButton fx:id="byMonthBtt" mnemonicParsing="false" onAction="#byMonthAction" text="By Month" toggleGroup="$tableViewTG" />
+            <RadioButton fx:id="byWeekBtt" mnemonicParsing="false" onAction="#byWeekAction" text="By Week" toggleGroup="$tableViewTG" />
          </children>
       </HBox>
    </children>

@@ -52,7 +52,7 @@ public abstract class AppointmentsDAO {
 
     public static void setByMonthAppointments() throws SQLException {
 
-        String sql = "SELECT * FROM appointments WHERE ";
+        String sql = "SELECT * FROM appointments WHERE Start >= CURDATE() AND Start <= CURDATE() + INTERVAL 1 MONTH;";
         PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
@@ -68,7 +68,7 @@ public abstract class AppointmentsDAO {
             int contactId = resultSet.getInt("Contact_ID");
 
             Appointments appointment = new Appointments(appointmentId, title, description, location, type, start, end, customerId, userId, contactId);
-            allAppointments.add(appointment);
+           byMonthAppointments.add(appointment);
         }
     }
 
@@ -77,7 +77,7 @@ public abstract class AppointmentsDAO {
     }
 
     public static void setByWeekAppointments() throws SQLException {
-        String sql = "SELECT * FROM appointments WHERE ";
+        String sql = "SELECT * FROM appointments WHERE Start >= CURDATE() AND Start <= CURDATE() + INTERVAL 1 WEEK;";
         PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
@@ -93,7 +93,7 @@ public abstract class AppointmentsDAO {
             int contactId = resultSet.getInt("Contact_ID");
 
             Appointments appointment = new Appointments(appointmentId, title, description, location, type, start, end, customerId, userId, contactId);
-            allAppointments.add(appointment);
+            byWeekAppointments.add(appointment);
         }
     }
 }

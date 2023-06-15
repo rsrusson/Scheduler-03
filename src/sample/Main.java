@@ -25,8 +25,6 @@ public class Main extends Application {
     public static void main(String[] args) throws SQLException {
         JDBC.openConnection();
 
-        AppointmentsDAO.setAllAppointments();
-
         launch(args);
 
         JDBC.closeConnection();
