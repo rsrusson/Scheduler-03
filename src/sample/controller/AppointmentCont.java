@@ -98,8 +98,6 @@ public class AppointmentCont implements Initializable {
     @FXML
     private RadioButton byWeekBtt;
 
-    private Appointments appointmentSelected = appointmentsTableView.getSelectionModel().getSelectedItem();
-
     @FXML
     void allAppointmentAction(ActionEvent event) throws SQLException {
         appointmentsTableView.getItems().clear();
@@ -171,19 +169,34 @@ public class AppointmentCont implements Initializable {
         userIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
         contactIdCol.setCellValueFactory(new PropertyValueFactory<>("contactId"));
 
-        if (appointmentSelected != null) {
-            appointmentIdTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
-            titleTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
-            descriptionTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
-            locationTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
-            typeTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
-            startTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
-            endTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
-            customerIdTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
-            userIdTxt.setText(String.valueOf(appointmentSelected.getAppointmentId()));
-            contactIdCB.commitValue(String.valueOf(appointmentSelected.getAppointmentId()));
-        }
+        appointmentsTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 
+
+            if (newSelection != null) {
+                appointmentIdTxt.setText(String.valueOf(newSelection.getAppointmentId()));
+                titleTxt.setText(String.valueOf(newSelection.getTitle()));
+                descriptionTxt.setText(String.valueOf(newSelection.getDescription()));
+                locationTxt.setText(String.valueOf(newSelection.getLocation()));
+                typeTxt.setText(String.valueOf(newSelection.getType()));
+                startTxt.setText(String.valueOf(newSelection.getStart()));
+                endTxt.setText(String.valueOf(newSelection.getEnd()));
+                customerIdTxt.setText(String.valueOf(newSelection.getCustomerId()));
+                userIdTxt.setText(String.valueOf(newSelection.getUserId()));
+                contactIdCB.setValue(newSelection.getContactId());
+            }
+            else{
+                appointmentIdTxt.clear();
+                titleTxt.clear();
+                descriptionTxt.clear();
+                locationTxt.clear();
+                typeTxt.clear();
+                startTxt.clear();
+                endTxt.clear();
+                customerIdTxt.clear();
+                userIdTxt.clear();
+                contactIdCB.getSelectionModel().clearSelection();
+            }
+        });
     }
 
 
