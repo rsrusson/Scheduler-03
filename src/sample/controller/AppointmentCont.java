@@ -123,8 +123,20 @@ public class AppointmentCont implements Initializable {
     }
 
     @FXML
-    void addAction(ActionEvent event) {
+    void addAction(ActionEvent event) throws SQLException {
+        String title = titleTxt.getText();
+        String description = descriptionTxt.getText();
+        String location = locationTxt.getText();
+        String type = typeTxt.getText();
+        LocalDateTime start = LocalDateTime.parse(startTxt.getText());
+        LocalDateTime end = LocalDateTime.parse(endTxt.getText());
+        int customerId = Integer.parseInt(customerIdTxt.getText());
+        int userId = Integer.parseInt(userIdTxt.getText());
+        int contactId = contactIdCB.getValue();
 
+        Appointments parsedAppointment = new Appointments(title, description, location, type, start, end, customerId, userId, contactId);
+        AppointmentsDAO.addAppointment(parsedAppointment);
+        appointmentsTableView.refresh();
     }
 
     @FXML
@@ -170,8 +182,6 @@ public class AppointmentCont implements Initializable {
         contactIdCol.setCellValueFactory(new PropertyValueFactory<>("contactId"));
 
         appointmentsTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-
-
             if (newSelection != null) {
                 appointmentIdTxt.setText(String.valueOf(newSelection.getAppointmentId()));
                 titleTxt.setText(String.valueOf(newSelection.getTitle()));
@@ -194,7 +204,7 @@ public class AppointmentCont implements Initializable {
                 endTxt.clear();
                 customerIdTxt.clear();
                 userIdTxt.clear();
-                contactIdCB.getSelectionModel().clearSelection();
+                contactIdCB.setValue(null);
             }
         });
     }

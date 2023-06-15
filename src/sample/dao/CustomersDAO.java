@@ -1,4 +1,4 @@
 package sample.dao;
 
-public abstract class CustomersDAO {
+public class CustomersDAO {
 }

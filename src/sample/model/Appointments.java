@@ -33,6 +33,19 @@ public class Appointments {
         this.contactId = contactId;
     }
 
+    public Appointments(String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, int customerId, int userId, int contactId) {
+
+        this.title = title;
+        this.description = description;
+        this.location = location;
+        this.type = type;
+        this.start = start;
+        this.end = end;
+        this.customerId = customerId;
+        this.userId = userId;
+        this.contactId = contactId;
+    }
+
     public int getAppointmentId() {
         return appointmentId;
     }

@@ -7,13 +7,10 @@ import javafx.collections.ObservableList;
 import sample.helper.JDBC;
 import sample.model.Appointments;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 
-public abstract class AppointmentsDAO {
+public class AppointmentsDAO {
 
     private static ObservableList<Appointments> allAppointments = FXCollections.observableArrayList();
 
@@ -95,5 +92,19 @@ public abstract class AppointmentsDAO {
             Appointments appointment = new Appointments(appointmentId, title, description, location, type, start, end, customerId, userId, contactId);
             byWeekAppointments.add(appointment);
         }
+    }
+    public static void addAppointment(Appointments newAppointment) throws SQLException {
+        String sql = "INSERT INTO appointments(Title, Description, Location, `Type`, Start, End, Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
+        preparedStatement.setString(1, newAppointment.getTitle());
+        preparedStatement.setString(2, newAppointment.getDescription());
+        preparedStatement.setString(3, newAppointment.getLocation());
+        preparedStatement.setString(4, newAppointment.getType());
+        preparedStatement.setTimestamp(5, Timestamp.valueOf(newAppointment.getStart()));
+        preparedStatement.setTimestamp(6, Timestamp.valueOf(newAppointment.getEnd()));
+        preparedStatement.setInt(7, newAppointment.getCustomerId());
+        preparedStatement.setInt(8, newAppointment.getUserId());
+        preparedStatement.setInt(9, newAppointment.getContactId());
+        preparedStatement.executeQuery();
     }
 }
