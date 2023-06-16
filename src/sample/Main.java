@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sample.dao.AppointmentsDAO;
+import sample.dao.CustomersDAO;
 import sample.helper.JDBC;
 
 import java.io.IOException;

@@ -8,17 +8,28 @@ public class Customers {
     private int customerId;
     private String customerName;
     private String address;
-    private String postalCodee;
+    private String postalCode;
     private String phone;
     private int divisionId;
+    private int countryId;
 
-    public Customers(int customerId, String customerName, String address, String postalCodee, String phone, int divisionId) {
+    public Customers(int customerId, String customerName, String address, String postalCode, String phone, int divisionId, int countryId) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.address = address;
-        this.postalCodee = postalCodee;
+        this.postalCode = postalCode;
         this.phone = phone;
         this.divisionId = divisionId;
+        this.countryId = countryId;
+    }
+
+    public Customers(String customerName, String address, String postalCode, String phone, int divisionId, int countryId) {
+        this.customerName = customerName;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.phone = phone;
+        this.divisionId = divisionId;
+        this.countryId = countryId;
     }
 
     public int getCustomerId() {
@@ -45,12 +56,12 @@ public class Customers {
         this.address = address;
     }
 
-    public String getPostalCodee() {
-        return postalCodee;
+    public String getPostalCode() {
+        return postalCode;
     }
 
-    public void setPostalCodee(String postalCodee) {
-        this.postalCodee = postalCodee;
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
     public String getPhone() {
@@ -67,5 +78,13 @@ public class Customers {
 
     public void setDivisionId(int divisionId) {
         this.divisionId = divisionId;
+    }
+
+    public int getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(int countryId) {
+        this.countryId = countryId;
     }
 }

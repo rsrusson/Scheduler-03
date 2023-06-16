@@ -56,8 +56,8 @@
             <TextField fx:id="addressTxt" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="postalTxt" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="phoneTxt" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ComboBox fx:id="stateCB" accessibleRole="LIST_ITEM" editable="true" prefWidth="150.0" promptText="State" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <ComboBox fx:id="countryCB" editable="true" prefWidth="150.0" promptText="Country" GridPane.rowIndex="5" />
+            <ComboBox fx:id="divisionIdCB" accessibleRole="LIST_ITEM" editable="true" prefWidth="150.0" promptText="Division ID" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ComboBox fx:id="countryIdCB" editable="true" prefWidth="150.0" promptText="Country ID" GridPane.rowIndex="5" />
          </children>
       </GridPane>
       <TableView fx:id="customerTV" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="100.0">
@@ -67,8 +67,8 @@
             <TableColumn fx:id="addressCol" minWidth="30.0" prefWidth="78.33334350585938" text="Address" />
             <TableColumn fx:id="postalCol" minWidth="1.333343505859375" prefWidth="39.0" text="Postal Code" />
             <TableColumn fx:id="phoneCol" minWidth="0.0" prefWidth="55.666656494140625" text="Phone Number" />
-            <TableColumn fx:id="countryCol" minWidth="0.0" prefWidth="57.333343505859375" text="Country" />
-            <TableColumn fx:id="stateCol" minWidth="15.0" prefWidth="81.66665649414062" text="State" />
+            <TableColumn fx:id="countryIdCol" minWidth="0.0" prefWidth="57.333343505859375" text="Country ID" />
+            <TableColumn fx:id="divisionIdCol" minWidth="15.0" prefWidth="81.66665649414062" text="Division ID" />
         </columns>
       </TableView>
       <HBox alignment="TOP_CENTER" layoutX="175.0" layoutY="313.0" prefHeight="100.0" prefWidth="200.0" spacing="40.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="400.0">
