@@ -65,7 +65,7 @@ public class AppointmentsDAO {
             int contactId = resultSet.getInt("Contact_ID");
 
             Appointments appointment = new Appointments(appointmentId, title, description, location, type, start, end, customerId, userId, contactId);
-           byMonthAppointments.add(appointment);
+            byMonthAppointments.add(appointment);
         }
     }
 
@@ -105,6 +105,31 @@ public class AppointmentsDAO {
         preparedStatement.setInt(7, newAppointment.getCustomerId());
         preparedStatement.setInt(8, newAppointment.getUserId());
         preparedStatement.setInt(9, newAppointment.getContactId());
-        preparedStatement.executeQuery();
+        preparedStatement.executeUpdate();
     }
+
+    public static void updateAppointment(Appointments updatedAppointment) throws SQLException {
+        String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, `Type` = ?, Start = ?, End = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
+        PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
+        preparedStatement.setString(1, updatedAppointment.getTitle());
+        preparedStatement.setString(2, updatedAppointment.getDescription());
+        preparedStatement.setString(3, updatedAppointment.getLocation());
+        preparedStatement.setString(4, updatedAppointment.getType());
+        preparedStatement.setTimestamp(5, Timestamp.valueOf(updatedAppointment.getStart()));
+        preparedStatement.setTimestamp(6, Timestamp.valueOf(updatedAppointment.getEnd()));
+        preparedStatement.setInt(7, updatedAppointment.getCustomerId());
+        preparedStatement.setInt(8, updatedAppointment.getUserId());
+        preparedStatement.setInt(9, updatedAppointment.getContactId());
+        preparedStatement.setInt(10, updatedAppointment.getAppointmentId());
+        preparedStatement.executeUpdate();
+
+        System.out.println(preparedStatement.toString());
+        }
+
+        public static void deleteAppointment(Appointments selectedAppointment) throws SQLException {
+            String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
+            PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
+            preparedStatement.setInt(1, selectedAppointment.getAppointmentId());
+            preparedStatement.executeUpdate();
+        }
 }

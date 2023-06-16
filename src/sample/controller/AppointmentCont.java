@@ -1,5 +1,7 @@
 package sample.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import sample.dao.AppointmentsDAO;
+import sample.dao.ContactsDAO;
 import sample.model.Appointments;
 
 import java.io.IOException;
@@ -98,6 +101,15 @@ public class AppointmentCont implements Initializable {
     @FXML
     private RadioButton byWeekBtt;
 
+    public ComboBox<Integer> getContactIdCB() {
+        return contactIdCB;
+    }
+
+    public void setContactIdCB() {
+        contactIdCB.getItems().addAll(ContactsDAO.getAllContactIds());
+        System.out.println("Combo Box set!");
+    }
+
     @FXML
     void allAppointmentAction(ActionEvent event) throws SQLException {
         appointmentsTableView.getItems().clear();
@@ -136,12 +148,41 @@ public class AppointmentCont implements Initializable {
 
         Appointments parsedAppointment = new Appointments(title, description, location, type, start, end, customerId, userId, contactId);
         AppointmentsDAO.addAppointment(parsedAppointment);
-        appointmentsTableView.refresh();
+        appointmentsTableView.getItems().clear();
+        if (allAppointmentBtt.isSelected()) {
+            AppointmentsDAO.setAllAppointments();
+            appointmentsTableView.setItems(AppointmentsDAO.getAllAppointments());
+            appointmentsTableView.refresh();
+        } else if (byMonthBtt.isSelected()){
+            AppointmentsDAO.setByMonthAppointments();
+            appointmentsTableView.setItems(AppointmentsDAO.getByMonthAppointments());
+            appointmentsTableView.refresh();
+        } else {
+            AppointmentsDAO.setByWeekAppointments();
+            appointmentsTableView.setItems(AppointmentsDAO.getByWeekAppointments());
+            appointmentsTableView.refresh();
+        }
     }
 
     @FXML
-    void deleteAction(ActionEvent event) {
+    void deleteAction(ActionEvent event) throws SQLException {
+        Appointments selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
 
+        AppointmentsDAO.deleteAppointment(selectedAppointment);
+        appointmentsTableView.getItems().clear();
+        if (allAppointmentBtt.isSelected()) {
+            AppointmentsDAO.setAllAppointments();
+            appointmentsTableView.setItems(AppointmentsDAO.getAllAppointments());
+            appointmentsTableView.refresh();
+        } else if (byMonthBtt.isSelected()){
+            AppointmentsDAO.setByMonthAppointments();
+            appointmentsTableView.setItems(AppointmentsDAO.getByMonthAppointments());
+            appointmentsTableView.refresh();
+        } else {
+            AppointmentsDAO.setByWeekAppointments();
+            appointmentsTableView.setItems(AppointmentsDAO.getByWeekAppointments());
+            appointmentsTableView.refresh();
+        }
     }
 
     @FXML
@@ -154,8 +195,49 @@ public class AppointmentCont implements Initializable {
     }
 
     @FXML
-    void updateAction(ActionEvent event) {
+    void updateAction(ActionEvent event) throws SQLException{
+        int appointmentId = Integer.parseInt(appointmentIdTxt.getText());
+        String title = titleTxt.getText();
+        String description = descriptionTxt.getText();
+        String location = locationTxt.getText();
+        String type = typeTxt.getText();
+        LocalDateTime start = LocalDateTime.parse(startTxt.getText());
+        LocalDateTime end = LocalDateTime.parse(endTxt.getText());
+        int customerId = Integer.parseInt(customerIdTxt.getText());
+        int userId = Integer.parseInt(userIdTxt.getText());
+        int contactId = contactIdCB.getValue();
 
+        Appointments parsedAppointment = new Appointments(appointmentId, title, description, location, type, start, end, customerId, userId, contactId);
+
+        /*for(Appointments chosenAppointment : AppointmentsDAO.getAllAppointments()){
+            if(parsedAppointment.getAppointmentId() == chosenAppointment.getAppointmentId()) {
+                chosenAppointment.setTitle(parsedAppointment.getTitle());
+                chosenAppointment.setDescription(parsedAppointment.getDescription());
+                chosenAppointment.setLocation(parsedAppointment.getLocation());
+                chosenAppointment.setType(parsedAppointment.getType());
+                chosenAppointment.setStart(parsedAppointment.getStart());
+                chosenAppointment.setEnd(parsedAppointment.getEnd());
+                chosenAppointment.setCustomerId(parsedAppointment.getCustomerId());
+                chosenAppointment.setUserId(parsedAppointment.getUserId());
+                chosenAppointment.setContactId(parsedAppointment.getContactId());
+            }
+        }*/
+
+        AppointmentsDAO.updateAppointment(parsedAppointment);
+        appointmentsTableView.getItems().clear();
+        if (allAppointmentBtt.isSelected()) {
+            AppointmentsDAO.setAllAppointments();
+            appointmentsTableView.setItems(AppointmentsDAO.getAllAppointments());
+            appointmentsTableView.refresh();
+        } else if (byMonthBtt.isSelected()){
+            AppointmentsDAO.setByMonthAppointments();
+            appointmentsTableView.setItems(AppointmentsDAO.getByMonthAppointments());
+            appointmentsTableView.refresh();
+        } else {
+            AppointmentsDAO.setByWeekAppointments();
+            appointmentsTableView.setItems(AppointmentsDAO.getByWeekAppointments());
+            appointmentsTableView.refresh();
+        }
     }
 
 
@@ -164,10 +246,12 @@ public class AppointmentCont implements Initializable {
 
         try {
             AppointmentsDAO.setAllAppointments();
+            ContactsDAO.setAllContactIds();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
+        setContactIdCB();
         appointmentsTableView.setItems(AppointmentsDAO.getAllAppointments());
 
         appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
