@@ -105,9 +105,16 @@ public class AppointmentCont implements Initializable {
         return contactIdCB;
     }
 
+    static void alertInfo(String title, String headerText, String contentText){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        alert.showAndWait();
+    }
+
     public void setContactIdCB() {
-        contactIdCB.getItems().addAll(ContactsDAO.getAllContactIds());
-        System.out.println("Combo Box set!");
+        contactIdCB.setItems(ContactsDAO.getAllContactIds());
     }
 
     @FXML
@@ -187,6 +194,9 @@ public class AppointmentCont implements Initializable {
 
     @FXML
     void menuAction(ActionEvent event) throws IOException {
+        appointmentsTableView.getItems().clear();
+        contactIdCB.getItems().removeAll(ContactsDAO.getAllContactIds());
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/menu.fxml"));
         Parent root = loader.load();
         Stage currentStage = (Stage) menuBtt.getScene().getWindow();
@@ -208,20 +218,6 @@ public class AppointmentCont implements Initializable {
         int contactId = contactIdCB.getValue();
 
         Appointments parsedAppointment = new Appointments(appointmentId, title, description, location, type, start, end, customerId, userId, contactId);
-
-        /*for(Appointments chosenAppointment : AppointmentsDAO.getAllAppointments()){
-            if(parsedAppointment.getAppointmentId() == chosenAppointment.getAppointmentId()) {
-                chosenAppointment.setTitle(parsedAppointment.getTitle());
-                chosenAppointment.setDescription(parsedAppointment.getDescription());
-                chosenAppointment.setLocation(parsedAppointment.getLocation());
-                chosenAppointment.setType(parsedAppointment.getType());
-                chosenAppointment.setStart(parsedAppointment.getStart());
-                chosenAppointment.setEnd(parsedAppointment.getEnd());
-                chosenAppointment.setCustomerId(parsedAppointment.getCustomerId());
-                chosenAppointment.setUserId(parsedAppointment.getUserId());
-                chosenAppointment.setContactId(parsedAppointment.getContactId());
-            }
-        }*/
 
         AppointmentsDAO.updateAppointment(parsedAppointment);
         appointmentsTableView.getItems().clear();

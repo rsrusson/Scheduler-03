@@ -10,9 +10,9 @@ import java.sql.SQLException;
 
 public class CountriesDAO {
 
-    private static ObservableList allCountryIds = FXCollections.observableArrayList();
+    private static ObservableList<Integer> allCountryIds = FXCollections.observableArrayList();
 
-    public static ObservableList getAllCountryIds() {
+    public static ObservableList<Integer> getAllCountryIds() {
         return allCountryIds;
     }
 

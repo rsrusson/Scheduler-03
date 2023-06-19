@@ -8,6 +8,7 @@ import sample.model.Customers;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 public class CustomersDAO {
 
@@ -15,6 +16,25 @@ public class CustomersDAO {
 
     public static ObservableList<Customers> getAllCustomers() {
         return allCustomers;
+    }
+
+    public static void addCustomer(Customers newCustomer) throws SQLException {
+        String sql = "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Division_ID)\n" +
+                "VALUES (?, ?, ?, ?, ?);";
+        PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
+        preparedStatement.setString(1, newCustomer.getCustomerName());
+        preparedStatement.setString(2, newCustomer.getAddress());
+        preparedStatement.setString(3, newCustomer.getPostalCode());
+        preparedStatement.setString(4, newCustomer.getPhone());
+        preparedStatement.setInt(5, newCustomer.getDivisionId());
+        preparedStatement.executeUpdate();
+    }
+
+    public static void deleteCustomer(Customers oldCustomer) throws SQLException {
+        String sql = "DELETE FROM customers WHERE Customer_ID = ?;";
+        PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
+        preparedStatement.setInt(1, oldCustomer.getCustomerId());
+        preparedStatement.executeUpdate();
     }
 
     public static void setAllCustomers() throws SQLException {
@@ -35,5 +55,20 @@ public class CustomersDAO {
             Customers customer = new Customers(customerId, customerName, address, postalCode, phone, divisionId, countryId);
             allCustomers.add(customer);
         }
+    }
+
+    public static void updateCustomer(Customers updatedCustomer) throws SQLException {
+        String sql = "UPDATE customers SET Customer_ID = ?, Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? WHERE Customer_ID = ?;";
+        PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
+        preparedStatement.setInt(1, updatedCustomer.getCustomerId());
+        preparedStatement.setString(2, updatedCustomer.getCustomerName());
+        preparedStatement.setString(3, updatedCustomer.getAddress());
+        preparedStatement.setString(4, updatedCustomer.getPostalCode());
+        preparedStatement.setString(5, updatedCustomer.getPhone());
+        preparedStatement.setInt(6, updatedCustomer.getDivisionId());
+        preparedStatement.setInt(7, updatedCustomer.getCustomerId());
+        preparedStatement.executeUpdate();
+
+        System.out.println(preparedStatement.toString());
     }
 }

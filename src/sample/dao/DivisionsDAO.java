@@ -3,6 +3,7 @@ package sample.dao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import sample.helper.JDBC;
+import sample.model.Divisions;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,9 +11,11 @@ import java.sql.SQLException;
 
 public class DivisionsDAO {
 
-    private static ObservableList allDivisonIds = FXCollections.observableArrayList();
+    private static ObservableList<Divisions> allDivisions = FXCollections.observableArrayList();
 
-    public static ObservableList getAllDivisonIds() {
+    private static ObservableList<Integer> allDivisonIds = FXCollections.observableArrayList();
+
+    public static ObservableList<Integer> getAllDivisonIds() {
         return allDivisonIds;
     }
 
@@ -23,6 +26,23 @@ public class DivisionsDAO {
         while(resultSet.next()){
             int divisionId = resultSet.getInt("Division_ID");
             allDivisonIds.add(divisionId);
+        }
+    }
+
+    public static ObservableList<Divisions> getAllDivisions() {
+        return allDivisions;
+    }
+
+    public static void setAllDivisions() throws SQLException {
+        String sql = "SELECT * FROM first_level_divisions;";
+        PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()){
+            int divisionId = resultSet.getInt("Division_ID");
+            String divisionName = resultSet.getString("Division");
+            int countryId = resultSet.getInt("Country_ID");
+            Divisions newDivision = new Divisions(divisionId, divisionName, countryId);
+            allDivisions.add(newDivision);
         }
     }
 }
