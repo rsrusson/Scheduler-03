@@ -122,37 +122,39 @@ public class CustomerCont implements Initializable{
     @FXML
     void addAction(ActionEvent event) throws ClassCastException {
         try {
-                String name = nameTxt.getText();
-                String address = addressTxt.getText();
-                String postalCode = postalTxt.getText();
-                String phone = phoneTxt.getText();
-                Integer divisionId = selectedDivisionId;
-                Integer countryId = selectedCountryId;
-                Customers parsedCustomer = new Customers(name, address, postalCode, phone, divisionId, countryId);
+            String name = nameTxt.getText();
+            String address = addressTxt.getText();
+            String postalCode = postalTxt.getText();
+            String phone = phoneTxt.getText();
+            Integer divisionId = selectedDivisionId;
+            Integer countryId = selectedCountryId;
+            Customers parsedCustomer = new Customers(name, address, postalCode, phone, divisionId, countryId);
 
-
-            try {
-                for (Divisions div : DivisionsDAO.getAllDivisions()) {
-                    if (div.getDivisionId() == parsedCustomer.getDivisionId() && div.getCountryId() == parsedCustomer.getCountryId()) {
-                        try {
-                            CustomersDAO.addCustomer(parsedCustomer);
-                            CustomersDAO.setAllCustomers();
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
+            for (Divisions div : DivisionsDAO.getAllDivisions()) {
+                if (div.getDivisionId() == parsedCustomer.getDivisionId() && div.getCountryId() == parsedCustomer.getCountryId()) {
+                    try {
+                        CustomersDAO.addCustomer(parsedCustomer);
+                        CustomersDAO.setAllCustomers();
                         customerTV.getItems().clear();
                         customerTV.refresh();
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
                     }
+                } else{
+                    customerTV.getItems().clear();
+                    CustomersDAO.setAllCustomers();
+                    customerTV.refresh();
                 }
-            }catch (ClassCastException c){
-                alertInfo("Warning!", "Improper data entry", "Please enter proper data for a new customer. Note that not all divisions and countries match up");
             }
-        }catch (ClassCastException c) {
-            alertInfo("Warning", "Improper data for a customer", "Please enter the appropriate data");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    @FXML
+
+
+
+                    @FXML
     void deleteAction(ActionEvent event) throws SQLException {
         Customers selectedCustomer = customerTV.getSelectionModel().getSelectedItem();
 
