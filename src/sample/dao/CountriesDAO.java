@@ -21,7 +21,7 @@ public class CountriesDAO {
         PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
         ResultSet resultSet = preparedStatement.executeQuery();
         while(resultSet.next()){
-            int countryId = resultSet.getInt("country_id");
+            Integer countryId = (Integer) resultSet.getInt("country_id");
             allCountryIds.add(countryId);
         }
     }

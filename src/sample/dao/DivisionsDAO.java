@@ -24,7 +24,7 @@ public class DivisionsDAO {
         PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
         ResultSet resultSet = preparedStatement.executeQuery();
         while(resultSet.next()){
-            int divisionId = resultSet.getInt("Division_ID");
+            Integer divisionId = (Integer) resultSet.getInt("Division_ID");
             allDivisonIds.add(divisionId);
         }
     }
@@ -38,9 +38,9 @@ public class DivisionsDAO {
         PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()){
-            int divisionId = resultSet.getInt("Division_ID");
+            Integer divisionId = (Integer) resultSet.getInt("Division_ID");
             String divisionName = resultSet.getString("Division");
-            int countryId = resultSet.getInt("Country_ID");
+            Integer countryId = (Integer) resultSet.getInt("Country_ID");
             Divisions newDivision = new Divisions(divisionId, divisionName, countryId);
             allDivisions.add(newDivision);
         }

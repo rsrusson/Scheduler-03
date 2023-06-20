@@ -5,21 +5,21 @@ import java.time.LocalDateTime;
 
 public class Divisions {
 
-    private int divisionId;
+    private Integer divisionId;
     private String division;
-    private int countryId;
+    private Integer countryId;
 
-    public Divisions(int divisionId, String division, int countryId) {
+    public Divisions(Integer divisionId, String division, Integer countryId) {
         this.divisionId = divisionId;
         this.division = division;
         this.countryId = countryId;
     }
 
-    public int getDivisionId() {
+    public Integer getDivisionId() {
         return divisionId;
     }
 
-    public void setDivisionId(int divisionId) {
+    public void setDivisionId(Integer divisionId) {
         this.divisionId = divisionId;
     }
 
@@ -31,11 +31,16 @@ public class Divisions {
         this.division = division;
     }
 
-    public int getCountryId() {
+    public Integer getCountryId() {
         return countryId;
     }
 
-    public void setCountryId(int countryId) {
+    public void setCountryId(Integer countryId) {
         this.countryId = countryId;
+    }
+
+    @Override
+    public String toString(){
+        return (Integer.toString(getDivisionId()) + " " + getDivision() + " " + getCountryId());
     }
 }

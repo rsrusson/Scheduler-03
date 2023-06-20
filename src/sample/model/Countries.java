@@ -2,23 +2,23 @@ package sample.model;
 
 public class Countries {
 
-    private int countryId;
+    private Integer countryId;
     private String country;
     //private LocalDateTime createDate;
     //private String createdBy;
     //private Timestamp lastUpdate;
     //private String lastUpdatedBy;
 
-    public Countries(int countryId, String country) {
+    public Countries(Integer countryId, String country) {
         this.countryId = countryId;
         this.country = country;
     }
 
-    public int getCountryId() {
+    public Integer getCountryId() {
         return countryId;
     }
 
-    public void setCountryId(int countryId) {
+    public void setCountryId(Integer countryId) {
         this.countryId = countryId;
     }
 
