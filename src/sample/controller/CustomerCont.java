@@ -75,8 +75,11 @@ public class CustomerCont implements Initializable {
     private TableColumn<Customers, Integer> divisionIdCol;
 
     @FXML
-    void divisionSelectionAction(ActionEvent event) {
-        //divisionCB.setValue(divisionCB.getValue());
+    public void divisionCBAction(ActionEvent actionEvent) {
+        divisionCB.getValue();
+        System.out.println(divisionCB.getValue());
+        Divisions selectedDivision = divisionCB.getSelectionModel().getSelectedItem();
+        divisionCB.setValue(selectedDivision);
     }
 
     public void setAllDivisions() throws SQLException {
@@ -105,7 +108,7 @@ public class CustomerCont implements Initializable {
     }*/
 
     public void setDivisionCB() {
-        divisionCB.setItems(allDivisions);
+        divisionCB.getItems().addAll(allDivisions);
     }
 
     @FXML
@@ -212,21 +215,17 @@ public class CustomerCont implements Initializable {
             DivisionsDAO.setAllDivisonIds();
             DivisionsDAO.setAllDivisions();
             CountriesDAO.setAllCountryIds();
+            setAllDivisions();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
         setDivisionCB();
 
-        /*countryIdCB.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            selectedCountryId = newValue;
-            countryIdCB.setValue(newValue);
-        });
-
-        divisionIdCB.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            selectedDivisionId = newValue;
-            divisionIdCB.setValue(newValue);
-        });*/
+        /*divisionCB.setOnAction(event -> {
+                    Divisions selectedDivision = divisionCB.getSelectionModel().getSelectedItem();
+                    divisionCB.setValue(selectedDivision);
+                });*/
 
         customerTV.setItems(CustomersDAO.getAllCustomers());
         idCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
@@ -245,27 +244,27 @@ public class CustomerCont implements Initializable {
                     addressTxt.setText(String.valueOf(newSelection.getAddress()));
                     postalTxt.setText(String.valueOf(newSelection.getPostalCode()));
                     phoneTxt.setText(String.valueOf(newSelection.getPhone()));
-                    for (Divisions div : allDivisions){
-                        if(newSelection.getDivisionId() == div.getDivisionId()){
+                    for (Divisions div : allDivisions) {
+                        if (newSelection.getDivisionId() == div.getDivisionId()) {
                             divisionCB.setValue(div);
                         }
                     }
                     //selectedCountryId = newSelection.getCountryId();
                     //selectedDivisionId = newSelection.getDivisionId();
                 }
-            /*else{
-                idTxt.clear();
-                nameTxt.clear();
-                addressTxt.clear();
-                postalTxt.clear();
-                phoneTxt.clear();
-                countryIdCB.setValue(nullInteger);
-                divisionIdCB.setValue(nullInteger);
-                selectedCountryId = null;
-                selectedDivisionId = null;
-            }*/
+                /*else{
+                    idTxt.clear();
+                    nameTxt.clear();
+                    addressTxt.clear();
+                    postalTxt.clear();
+                    phoneTxt.clear();
+                    countryIdCB.setValue(nullInteger);
+                    divisionIdCB.setValue(nullInteger);
+                    selectedCountryId = null;
+                    selectedDivisionId = null;
+                }*/
             });
-        }catch (ClassCastException e){
+        } catch (ClassCastException e){
             System.out.println("Caught in Table View Listener");
         }
     }
