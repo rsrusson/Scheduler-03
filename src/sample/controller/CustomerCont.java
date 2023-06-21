@@ -25,6 +25,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CustomerCont implements Initializable {
 
+    CustomerCont customerCont;
+
     private AtomicBoolean isUpdating = new AtomicBoolean(false);
 
     private Divisions selectedDivision;
@@ -78,16 +80,14 @@ public class CustomerCont implements Initializable {
 
     @FXML
     void divisionCBAction(ActionEvent event) {
-        System.out.println("CB event active");
         if (!isUpdating.get()){
+            System.out.println("CBAction engaged after isUpdating check");
             isUpdating.set(true);
             for (Divisions div : allDivisions) {
                 if (div.equals(divisionCB.getSelectionModel().getSelectedItem())) {
                     selectedDivision = div;
                 }
             }
-            System.out.println(selectedDivision);
-            System.out.println(divisionCB.getSelectionModel().getSelectedItem());
             isUpdating.set(false);
         }
     }
@@ -129,7 +129,6 @@ public class CustomerCont implements Initializable {
             customerTV.setItems(CustomersDAO.getAllCustomers());
             customerTV.refresh();
         } catch (ClassCastException e) {
-            System.out.println(e.getCause());
             System.out.println("Class Cast Exception caught in add action");
             alertInfo("Class Cast Exception", "Division ID and Country ID do not match", "Please enter a Country and Division ID that match");
         } catch (SQLException e){
@@ -165,26 +164,34 @@ public class CustomerCont implements Initializable {
     }
 
     @FXML
-    void updateAction(ActionEvent event) throws SQLException{
-        int customerId = Integer.parseInt(idTxt.getText());
-        String name = nameTxt.getText();
-        String address = addressTxt.getText();
-        String postalCode = postalTxt.getText();
-        String phone = phoneTxt.getText();
-        Integer divisionId = divisionCB.getSelectionModel().getSelectedItem().getDivisionId();
-        Integer countryId = divisionCB.getSelectionModel().getSelectedItem().getCountryId();
+    void updateAction(ActionEvent event) throws RuntimeException{
+        try {
+            int customerId = Integer.parseInt(idTxt.getText());
+            String name = nameTxt.getText();
+            String address = addressTxt.getText();
+            String postalCode = postalTxt.getText();
+            String phone = phoneTxt.getText();
+            Integer divisionId = selectedDivision.getDivisionId();
+            Integer countryId = selectedDivision.getCountryId();
 
-        Customers parsedCustomer = new Customers(customerId, name, address, postalCode, phone, divisionId, countryId);
-        CustomersDAO.updateCustomer(parsedCustomer);
-        customerTV.getItems().clear();
-        CustomersDAO.setAllCustomers();
-        customerTV.setItems(CustomersDAO.getAllCustomers());
-        customerTV.refresh();
+            Customers parsedCustomer = new Customers(customerId, name, address, postalCode, phone, divisionId, countryId);
+            CustomersDAO.updateCustomer(parsedCustomer);
+            customerTV.getItems().clear();
+            CustomersDAO.setAllCustomers();
+            customerTV.setItems(CustomersDAO.getAllCustomers());
+            customerTV.refresh();
+        } catch (ClassCastException e){
+            alertInfo("Error", "Class Cast Exception", "Please input appropriate data");
+        } catch (SQLException throwables){
+            alertInfo("Error", "SQL Exception", "Please input appropriate data");
+        }
     }
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+
 
         isUpdating.set(false);
 
@@ -208,38 +215,6 @@ public class CustomerCont implements Initializable {
         countryIdCol.setCellValueFactory(new PropertyValueFactory<>("countryId"));
         divisionIdCol.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
 
-        /*try {
-            divisionCB.focusedProperty().addListener((obs, oldValue, newValue) -> {
-                if (!newValue) {
-                    isUpdating.set(true);
-                    isUpdating.set(false);
-                }
-            });
-        }catch (RuntimeException e){
-            System.out.println("Caught in the combo box listener");
-        }
-
-        try {
-            divisionCB.getSelectionModel().selectedItemProperty().addListener((obs, oldSelectionCB, newSelectionCB) -> {
-                if (newSelectionCB != null && !isUpdating.get()) {
-                    isUpdating.set(true);
-                    System.out.println(newSelectionCB.getClass().getName());
-                    for (Divisions div : allDivisions) {
-                        if (div.getDivision().equals(newSelectionCB.getDivision())) {
-                            selectedDivision = div;
-                            System.out.println("selectedDivision set from combo box");
-                            divisionCB.getSelectionModel().select(selectedDivision);
-                            System.out.println("divisionCB set from combo box");
-                        }
-                    }
-                    isUpdating.set(false);
-                }
-            });
-
-        }catch (RuntimeException e){
-            System.out.println("Caught in the combo box listener");
-        }*/
-
         try {
             customerTV.getSelectionModel().selectedItemProperty().addListener((obsTV, oldSelectionTV, newSelectionTV) -> {
                 if (newSelectionTV != null && !isUpdating.get()) {
@@ -250,15 +225,11 @@ public class CustomerCont implements Initializable {
                     postalTxt.setText(String.valueOf(newSelectionTV.getPostalCode()));
                     phoneTxt.setText(String.valueOf(newSelectionTV.getPhone()));
                     for (Divisions div : allDivisions) {
-                        if (div.getCountryId().equals(newSelectionTV.getDivisionId())) {
+                        if (div.getDivisionId().equals(newSelectionTV.getDivisionId())) {
                             selectedDivision = div;
-                            System.out.println("selectedDivision set in TV");
                             divisionCB.getSelectionModel().select(selectedDivision);
-                            System.out.println("select in TV works");
                         }
                     }
-                    System.out.println(selectedDivision);
-                    System.out.println(divisionCB.getSelectionModel().getSelectedItem());
                     isUpdating.set(false);
                 }
             });
