@@ -41,6 +41,6 @@ public class Divisions {
 
     @Override
     public String toString(){
-        return (Integer.toString(getDivisionId()) + " " + getDivision() + " " + getCountryId());
+        return (String.valueOf(getDivisionId()));
     }
 }

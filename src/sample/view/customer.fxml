@@ -56,7 +56,7 @@
             <TextField fx:id="addressTxt" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="postalTxt" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="phoneTxt" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ComboBox fx:id="divisionCB" accessibleRole="LIST_ITEM" editable="true" onAction="#divisionCBAction" prefWidth="150.0" promptText="Division and Country" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ComboBox fx:id="divisionCB" accessibleRole="LIST_ITEM" editable="true" onMouseClicked="#divisionCBAction" prefWidth="150.0" promptText="Division and Country" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
       </GridPane>
       <TableView fx:id="customerTV" layoutX="195.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="100.0">
