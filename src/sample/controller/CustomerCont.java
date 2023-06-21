@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import sample.dao.CountriesDAO;
 import sample.dao.CustomersDAO;
 import sample.dao.DivisionsDAO;
+import sample.model.Countries;
 import sample.model.Customers;
 import sample.model.Divisions;
 
@@ -31,7 +32,11 @@ public class CustomerCont implements Initializable {
 
     private Divisions selectedDivision;
 
-    private ObservableList<Divisions> allDivisions = DivisionsDAO.getAllDivisions();
+    private Countries selectedCountry;
+
+    private ObservableList<Divisions> allDivisions;
+
+    private ObservableList<Countries> allCountries;
 
     @FXML
     private TableColumn<Customers, String> addressCol;
@@ -79,6 +84,23 @@ public class CustomerCont implements Initializable {
     private TableColumn<Customers, Integer> divisionIdCol;
 
     @FXML
+    private ComboBox<Countries> countryCB;
+
+    @FXML
+    void countryCBAction(ActionEvent event) {
+        if (!isUpdating.get()){
+            System.out.println("CBAction engaged after isUpdating check");
+            isUpdating.set(true);
+            for (Countries country : allCountries) {
+                if (country.equals(countryCB.getSelectionModel().getSelectedItem())) {
+                    selectedCountry = country;
+                }
+            }
+            isUpdating.set(false);
+        }
+    }
+
+    @FXML
     void divisionCBAction(ActionEvent event) {
         if (!isUpdating.get()){
             System.out.println("CBAction engaged after isUpdating check");
@@ -95,6 +117,13 @@ public class CustomerCont implements Initializable {
     public void setAllDivisions() throws SQLException {
         DivisionsDAO.setAllDivisions();
         allDivisions = DivisionsDAO.getAllDivisions();
+        divisionCB.getItems().addAll(allDivisions);
+    }
+
+    public void setAllCountries() throws SQLException{
+        CountriesDAO.setAllCountries();
+        allCountries = CountriesDAO.getAllCountries();
+        countryCB.getItems().addAll(allCountries);
     }
 
     static void alertInfo(String title, String headerText, String contentText){
@@ -103,10 +132,6 @@ public class CustomerCont implements Initializable {
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
         alert.showAndWait();
-    }
-
-    public void setDivisionCB() {
-        divisionCB.getItems().addAll(allDivisions);
     }
 
     @FXML
@@ -154,7 +179,8 @@ public class CustomerCont implements Initializable {
     @FXML
     void menuAction(ActionEvent event) throws IOException {
         customerTV.getItems().clear();
-        divisionCB.getItems().removeAll(DivisionsDAO.getAllDivisions());
+        divisionCB.getItems().clear();
+        countryCB.getItems().clear();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/menu.fxml"));
         Parent root = loader.load();
@@ -196,12 +222,8 @@ public class CustomerCont implements Initializable {
         isUpdating.set(false);
 
         try {
-            CustomersDAO.setAllCustomers();
-            DivisionsDAO.setAllDivisonIds();
-            DivisionsDAO.setAllDivisions();
-            CountriesDAO.setAllCountryIds();
+            setAllCountries();
             setAllDivisions();
-            setDivisionCB();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -228,6 +250,12 @@ public class CustomerCont implements Initializable {
                         if (div.getDivisionId().equals(newSelectionTV.getDivisionId())) {
                             selectedDivision = div;
                             divisionCB.getSelectionModel().select(selectedDivision);
+                        }
+                    }
+                    for (Countries country : allCountries){
+                        if (country.getCountryId().equals(newSelectionTV.getCountryId())){
+                            selectedCountry = country;
+                            countryCB.getSelectionModel().select(selectedCountry);
                         }
                     }
                     isUpdating.set(false);
