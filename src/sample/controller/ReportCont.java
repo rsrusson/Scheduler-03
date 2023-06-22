@@ -1,5 +1,6 @@
 package sample.controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,61 +12,89 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import sample.dao.AppointmentsDAO;
+import sample.dao.ContactsDAO;
 import sample.model.Appointments;
+import sample.model.Contacts;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.HashSet;
+import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class ReportCont implements Initializable {
 
-    private ObservableList<Appointments> allAppointments;
+    private ObservableList<Appointments> allAppointments = FXCollections.observableArrayList();
+
+    private ObservableList<Contacts> allContacts = FXCollections.observableArrayList();
+
+    ObservableList<String> monthList = FXCollections.observableArrayList();
+
+    private Set<String> typeSet = new HashSet<>();
 
     @FXML
     private TableView<Appointments> allApptTV;
 
     @FXML
-    private TableColumn<?, ?> appointmentIdCol;
+    private TableColumn<Appointments, Integer> appointmentIdCol;
 
     @FXML
-    private TableColumn<?, ?> contactIdCol;
+    private TableColumn<Appointments, Integer> contactIdCol;
 
     @FXML
-    private TableColumn<?, ?> customerIdCol;
+    private TableColumn<Appointments, Integer> customerIdCol;
 
     @FXML
-    private TableColumn<?, ?> descriptionCol;
+    private TableColumn<Appointments, String> descriptionCol;
 
     @FXML
-    private TableColumn<?, ?> endCol;
+    private TableColumn<Appointments, LocalDateTime> endCol;
 
     @FXML
     private Button menuBtt;
 
     @FXML
-    private ComboBox<?> monthCB;
+    private ComboBox<String> monthCB;
 
     @FXML
     private TextField monthTxt;
 
     @FXML
-    private TableColumn<?, ?> startCol;
+    private TableColumn<Appointments, LocalDateTime> startCol;
 
     @FXML
-    private TableColumn<?, ?> titleCol;
+    private TableColumn<Appointments, String> titleCol;
 
     @FXML
-    private ComboBox<?> typeCB;
+    private ComboBox<String> typeCB;
 
     @FXML
-    private TableColumn<?, ?> typeCol;
+    private TableColumn<Appointments, String> typeCol;
 
     @FXML
     private TextField typeTxt;
 
     @FXML
-    private ComboBox<?> contactCB;
+    private ComboBox<Contacts> contactCB;
+
+    @FXML
+    void contactCBAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void typeCBAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void monthCBAction(ActionEvent event) {
+
+    }
 
     @FXML
     void byContactBtt(ActionEvent event) {
@@ -73,7 +102,12 @@ public class ReportCont implements Initializable {
     }
 
     @FXML
-    void contactCBAction(ActionEvent event) {
+    void perTypeBtt(ActionEvent event) {
+
+    }
+
+    @FXML
+    void perMonthBtt(ActionEvent event) {
 
     }
 
@@ -94,16 +128,6 @@ public class ReportCont implements Initializable {
         currentStage.show();
     }
 
-    @FXML
-    void perMonthAction(ActionEvent event) {
-
-    }
-
-    @FXML
-    void perTypeAction(ActionEvent event) {
-
-    }
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -111,9 +135,26 @@ public class ReportCont implements Initializable {
         try {
             AppointmentsDAO.setAllAppointments();
             allAppointments = AppointmentsDAO.getAllAppointments();
+            ContactsDAO.setAllContacts();
+            allContacts = ContactsDAO.getAllContacts();
         } catch (SQLException throwables) {
             alertInfo("Error", "SQL Exception Error", "Please ensure proper data is input");
         }
+
+        for (Month month : Month.values()) {
+            String monthName = month.toString();
+            monthList.add(monthName);
+        }
+
+        for (Appointments appointments : allAppointments){
+            typeSet.add(appointments.getType().toUpperCase(Locale.ROOT));
+        }
+
+        monthCB.getItems().addAll(monthList);
+
+        contactCB.getItems().addAll(allContacts);
+
+        typeCB.getItems().addAll(typeSet);
 
         allApptTV.setItems(AppointmentsDAO.getAllAppointments());
         appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));

@@ -41,6 +41,6 @@ public class Divisions {
 
     @Override
     public String toString(){
-        return (String.valueOf(getDivisionId()));
+        return (division);
     }
 }

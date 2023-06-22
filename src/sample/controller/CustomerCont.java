@@ -1,5 +1,6 @@
 package sample.controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -37,6 +38,8 @@ public class CustomerCont implements Initializable {
     private ObservableList<Divisions> allDivisions;
 
     private ObservableList<Countries> allCountries;
+
+    private ObservableList<Divisions> filteredDivisions = FXCollections.observableArrayList();
 
     @FXML
     private TableColumn<Customers, String> addressCol;
@@ -89,29 +92,44 @@ public class CustomerCont implements Initializable {
     @FXML
     void countryCBAction(ActionEvent event) {
         if (!isUpdating.get()){
-            System.out.println("CBAction engaged after isUpdating check");
+            System.out.println("Country CBAction engaged after isUpdating check");
             isUpdating.set(true);
             for (Countries country : allCountries) {
                 if (country.equals(countryCB.getSelectionModel().getSelectedItem())) {
                     selectedCountry = country;
                 }
             }
-            isUpdating.set(false);
+            if (selectedDivision != null && !selectedDivision.getCountryId().equals(selectedCountry.getCountryId())) {
+                selectedDivision = null;
+                divisionCB.getSelectionModel().select(selectedDivision);
+            }
+            divisionCB.getItems().clear();
+            filteredDivisions.clear();
+            if (selectedCountry != null) {
+                for (Divisions div : allDivisions) {
+                    if (div.getCountryId().equals(selectedCountry.getCountryId())) {
+                        filteredDivisions.add(div);
+                    }
+                }
+            }
+            divisionCB.getItems().addAll(filteredDivisions);
+            divisionCB.getSelectionModel().select(selectedDivision);
         }
+        isUpdating.set(false);
     }
 
     @FXML
     void divisionCBAction(ActionEvent event) {
         if (!isUpdating.get()){
-            System.out.println("CBAction engaged after isUpdating check");
+            System.out.println("Division CBAction engaged after isUpdating check");
             isUpdating.set(true);
             for (Divisions div : allDivisions) {
                 if (div.equals(divisionCB.getSelectionModel().getSelectedItem())) {
                     selectedDivision = div;
                 }
             }
-            isUpdating.set(false);
         }
+        isUpdating.set(false);
     }
 
     public void setAllDivisions() throws SQLException {
@@ -222,6 +240,7 @@ public class CustomerCont implements Initializable {
         isUpdating.set(false);
 
         try {
+            CustomersDAO.setAllCustomers();
             setAllCountries();
             setAllDivisions();
         } catch (SQLException throwables) {
@@ -246,20 +265,30 @@ public class CustomerCont implements Initializable {
                     addressTxt.setText(String.valueOf(newSelectionTV.getAddress()));
                     postalTxt.setText(String.valueOf(newSelectionTV.getPostalCode()));
                     phoneTxt.setText(String.valueOf(newSelectionTV.getPhone()));
-                    for (Divisions div : allDivisions) {
-                        if (div.getDivisionId().equals(newSelectionTV.getDivisionId())) {
-                            selectedDivision = div;
-                            divisionCB.getSelectionModel().select(selectedDivision);
-                        }
-                    }
                     for (Countries country : allCountries){
                         if (country.getCountryId().equals(newSelectionTV.getCountryId())){
                             selectedCountry = country;
                             countryCB.getSelectionModel().select(selectedCountry);
                         }
                     }
-                    isUpdating.set(false);
+                    for (Divisions div : allDivisions) {
+                        if (div.getDivisionId().equals(newSelectionTV.getDivisionId())) {
+                            selectedDivision = div;
+                        }
+                    }
+                    divisionCB.getItems().clear();
+                    filteredDivisions.clear();
+                    for (Divisions div : allDivisions){
+                        if (div.getCountryId().equals(selectedCountry.getCountryId())){
+                            filteredDivisions.add(div);
+                        }
+                    }
+                    divisionCB.getItems().addAll(filteredDivisions);
+
+                    divisionCB.setValue(selectedDivision);
+                    divisionCB.getSelectionModel().select(selectedDivision);
                 }
+                isUpdating.set(false);
             });
         } catch (RuntimeException e){
             System.out.println("Caught in Table View Listener");

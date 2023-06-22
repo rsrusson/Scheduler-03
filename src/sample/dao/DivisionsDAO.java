@@ -35,6 +35,7 @@ public class DivisionsDAO {
 
     public static void setAllDivisions() throws SQLException {
         String sql = "SELECT * FROM first_level_divisions;";
+        allDivisions.clear();
         PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()){

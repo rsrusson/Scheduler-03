@@ -35,7 +35,7 @@ public class CountriesDAO {
 
     public static void setAllCountries() throws SQLException {
         String sql = "SELECT * FROM countries;";
-
+        allCountries.clear();
         PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()){
