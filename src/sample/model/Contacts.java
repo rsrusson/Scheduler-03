@@ -38,6 +38,6 @@ public class Contacts {
 
     @Override
     public String toString(){
-        return String.valueOf(contactId);
+        return contactName;
     }
 }

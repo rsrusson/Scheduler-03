@@ -11,11 +11,11 @@ import java.sql.SQLException;
 
 public class ContactsDAO {
 
-    private static ObservableList allContacts = FXCollections.observableArrayList();
+    private static ObservableList<Contacts> allContacts = FXCollections.observableArrayList();
 
-    private static ObservableList allContactIds = FXCollections.observableArrayList();
+    private static ObservableList<Integer> allContactIds = FXCollections.observableArrayList();
 
-    public static ObservableList getAllContactIds() {
+    public static ObservableList<Integer> getAllContactIds() {
         return allContactIds;
     }
 
@@ -29,7 +29,7 @@ public class ContactsDAO {
         }
     }
 
-    public static ObservableList getAllContacts() {
+    public static ObservableList<Contacts> getAllContacts() {
         return allContacts;
     }
 

@@ -28,13 +28,21 @@ import java.util.Set;
 
 public class ReportCont implements Initializable {
 
+    private Contacts selectedContact;
+
+    private String selectedType;
+
+    private String selectedMonth;
+
     private ObservableList<Appointments> allAppointments = FXCollections.observableArrayList();
+
+    private ObservableList<Appointments> filteredAppointments = FXCollections.observableArrayList();
 
     private ObservableList<Contacts> allContacts = FXCollections.observableArrayList();
 
-    ObservableList<String> monthList = FXCollections.observableArrayList();
-
     private Set<String> typeSet = new HashSet<>();
+
+    private ObservableList<String> monthList = FXCollections.observableArrayList();
 
     @FXML
     private TableView<Appointments> allApptTV;
@@ -82,33 +90,65 @@ public class ReportCont implements Initializable {
     private ComboBox<Contacts> contactCB;
 
     @FXML
-    void contactCBAction(ActionEvent event) {
+    void refreshTVBtt(ActionEvent event) {
+        filteredAppointments.clear();
+        allApptTV.setItems(allAppointments);
+    }
 
+    @FXML
+    void contactCBAction(ActionEvent event) {
+        selectedContact = contactCB.getSelectionModel().getSelectedItem();
     }
 
     @FXML
     void typeCBAction(ActionEvent event) {
-
+        selectedType = typeCB.getSelectionModel().getSelectedItem();
     }
 
     @FXML
     void monthCBAction(ActionEvent event) {
-
+        selectedMonth = monthCB.getSelectionModel().getSelectedItem();
     }
 
     @FXML
     void byContactBtt(ActionEvent event) {
-
+        if (selectedContact != null){
+            filteredAppointments.clear();
+            for (Appointments selectedAppointment : allAppointments){
+                if (selectedAppointment.getContactId() == selectedContact.getContactId()){
+                    filteredAppointments.add(selectedAppointment);
+                }
+            }
+            allApptTV.setItems(filteredAppointments);
+        }
     }
 
     @FXML
     void perTypeBtt(ActionEvent event) {
-
+        if (selectedType != null){
+            filteredAppointments.clear();
+            for (Appointments selectedAppointment : allAppointments){
+                if (selectedAppointment.getType().equalsIgnoreCase(selectedType)){
+                    filteredAppointments.add(selectedAppointment);
+                }
+            }
+            allApptTV.setItems(filteredAppointments);
+            typeTxt.setText(String.valueOf(filteredAppointments.size()));
+        }
     }
 
     @FXML
     void perMonthBtt(ActionEvent event) {
-
+        if (selectedMonth != null){
+            filteredAppointments.clear();
+            for (Appointments selectedAppointment : allAppointments){
+                if (selectedAppointment.getStart().getMonth().toString().equalsIgnoreCase(selectedMonth)){
+                    filteredAppointments.add(selectedAppointment);
+                }
+            }
+            allApptTV.setItems(filteredAppointments);
+            monthTxt.setText(String.valueOf(filteredAppointments.size()));
+        }
     }
 
     static void alertInfo(String title, String headerText, String contentText){
@@ -150,11 +190,11 @@ public class ReportCont implements Initializable {
             typeSet.add(appointments.getType().toUpperCase(Locale.ROOT));
         }
 
-        monthCB.getItems().addAll(monthList);
-
         contactCB.getItems().addAll(allContacts);
 
         typeCB.getItems().addAll(typeSet);
+
+        monthCB.getItems().addAll(monthList);
 
         allApptTV.setItems(AppointmentsDAO.getAllAppointments());
         appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
@@ -166,5 +206,6 @@ public class ReportCont implements Initializable {
         customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         contactIdCol.setCellValueFactory(new PropertyValueFactory<>("contactId"));
         allApptTV.sort();
+
     }
 }

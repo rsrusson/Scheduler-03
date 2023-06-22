@@ -1,7 +1,5 @@
 package sample.controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +12,7 @@ import javafx.stage.Stage;
 import sample.dao.AppointmentsDAO;
 import sample.dao.ContactsDAO;
 import sample.model.Appointments;
+import sample.model.Contacts;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +21,8 @@ import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 public class AppointmentCont implements Initializable {
+
+    private Contacts selectedContact;
 
     @FXML
     private TableColumn<Appointments, Integer> appointmentIdCol;
@@ -33,7 +34,7 @@ public class AppointmentCont implements Initializable {
     private TextField appointmentIdTxt;
 
     @FXML
-    private ComboBox<Integer> contactIdCB;
+    private ComboBox<Contacts> contactCB;
 
     @FXML
     private TableColumn<Appointments, Integer> contactIdCol;
@@ -101,10 +102,6 @@ public class AppointmentCont implements Initializable {
     @FXML
     private RadioButton byWeekBtt;
 
-    public ComboBox<Integer> getContactIdCB() {
-        return contactIdCB;
-    }
-
     static void alertInfo(String title, String headerText, String contentText){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -113,8 +110,16 @@ public class AppointmentCont implements Initializable {
         alert.showAndWait();
     }
 
-    public void setContactIdCB() {
-        contactIdCB.setItems(ContactsDAO.getAllContactIds());
+    public void setContactCB() {
+        contactCB.setItems(ContactsDAO.getAllContacts());
+    }
+
+    @FXML
+    void contactCBAction(ActionEvent event) {
+        for (Contacts thisContact : ContactsDAO.getAllContacts()) {
+            if (thisContact.equals(contactCB.getSelectionModel().getSelectedItem()));
+                selectedContact = thisContact;
+        }
     }
 
     @FXML
@@ -151,7 +156,24 @@ public class AppointmentCont implements Initializable {
         LocalDateTime end = LocalDateTime.parse(endTxt.getText());
         int customerId = Integer.parseInt(customerIdTxt.getText());
         int userId = Integer.parseInt(userIdTxt.getText());
-        int contactId = contactIdCB.getValue();
+        int contactId = selectedContact.getContactId();
+
+        if (start.getHour() < 8 || start.getHour() > 22 || end.getHour() < 8 || end.getHour() > 22) {
+            alertInfo("Error", "Business hours are between 0800 and 2200", "Please schedule an appointment within business hours");
+            return;
+        }
+
+        for (Appointments thisAppointment : AppointmentsDAO.getAllAppointments()){
+            if (thisAppointment.getCustomerId() == customerId){
+                LocalDateTime existingStart = thisAppointment.getStart();
+                LocalDateTime existingEnd = thisAppointment.getEnd();
+
+                if (start.isBefore(existingEnd) && end.isAfter(existingStart)){
+                    alertInfo("Error", "This appointment overlaps for this customer", "Please input a non overlapping time for this appointment.");
+                    return;
+                }
+            }
+        }
 
         Appointments parsedAppointment = new Appointments(title, description, location, type, start, end, customerId, userId, contactId);
         AppointmentsDAO.addAppointment(parsedAppointment);
@@ -195,7 +217,7 @@ public class AppointmentCont implements Initializable {
     @FXML
     void menuAction(ActionEvent event) throws IOException {
         appointmentsTableView.getItems().clear();
-        contactIdCB.getItems().removeAll(ContactsDAO.getAllContactIds());
+        contactCB.getItems().removeAll(ContactsDAO.getAllContacts());
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/menu.fxml"));
         Parent root = loader.load();
@@ -215,7 +237,7 @@ public class AppointmentCont implements Initializable {
         LocalDateTime end = LocalDateTime.parse(endTxt.getText());
         int customerId = Integer.parseInt(customerIdTxt.getText());
         int userId = Integer.parseInt(userIdTxt.getText());
-        int contactId = contactIdCB.getValue();
+        int contactId = selectedContact.getContactId();
 
         Appointments parsedAppointment = new Appointments(appointmentId, title, description, location, type, start, end, customerId, userId, contactId);
 
@@ -242,12 +264,13 @@ public class AppointmentCont implements Initializable {
 
         try {
             AppointmentsDAO.setAllAppointments();
+            ContactsDAO.setAllContacts();
             ContactsDAO.setAllContactIds();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
-        setContactIdCB();
+        setContactCB();
         appointmentsTableView.setItems(AppointmentsDAO.getAllAppointments());
 
         appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
@@ -272,7 +295,12 @@ public class AppointmentCont implements Initializable {
                 endTxt.setText(String.valueOf(newSelection.getEnd()));
                 customerIdTxt.setText(String.valueOf(newSelection.getCustomerId()));
                 userIdTxt.setText(String.valueOf(newSelection.getUserId()));
-                contactIdCB.setValue(newSelection.getContactId());
+                for (Contacts thisContact : ContactsDAO.getAllContacts()){
+                    if (thisContact.getContactId() == newSelection.getContactId()){
+                        selectedContact = thisContact;
+                    }
+                }
+                contactCB.setValue(selectedContact);
             }
             else{
                 appointmentIdTxt.clear();
@@ -284,7 +312,7 @@ public class AppointmentCont implements Initializable {
                 endTxt.clear();
                 customerIdTxt.clear();
                 userIdTxt.clear();
-                contactIdCB.setValue(null);
+                contactCB.setValue(null);
             }
         });
     }

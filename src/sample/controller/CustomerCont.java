@@ -12,9 +12,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import sample.dao.AppointmentsDAO;
 import sample.dao.CountriesDAO;
 import sample.dao.CustomersDAO;
 import sample.dao.DivisionsDAO;
+import sample.model.Appointments;
 import sample.model.Countries;
 import sample.model.Customers;
 import sample.model.Divisions;
@@ -40,6 +42,8 @@ public class CustomerCont implements Initializable {
     private ObservableList<Countries> allCountries;
 
     private ObservableList<Divisions> filteredDivisions = FXCollections.observableArrayList();
+
+    private ObservableList<Appointments> allAppointments = FXCollections.observableArrayList();
 
     @FXML
     private TableColumn<Customers, String> addressCol;
@@ -187,11 +191,19 @@ public class CustomerCont implements Initializable {
     void deleteAction(ActionEvent event) throws SQLException {
         Customers selectedCustomer = customerTV.getSelectionModel().getSelectedItem();
 
+        for (Appointments thisAppointment : allAppointments){
+            if (thisAppointment.getCustomerId() == selectedCustomer.getCustomerId()){
+                alertInfo("Error", "This customer still has appointments", "Delete this customer's appointments before deleting the customer");
+                return;
+            }
+        }
+
         CustomersDAO.deleteCustomer(selectedCustomer);
         customerTV.getItems().clear();
         CustomersDAO.setAllCustomers();
         customerTV.setItems(CustomersDAO.getAllCustomers());
         customerTV.refresh();
+        alertInfo("Message", "Customer is deleted", "Customer is deleted");
     }
 
     @FXML
@@ -241,6 +253,8 @@ public class CustomerCont implements Initializable {
 
         try {
             CustomersDAO.setAllCustomers();
+            AppointmentsDAO.setAllAppointments();
+            allAppointments = AppointmentsDAO.getAllAppointments();
             setAllCountries();
             setAllDivisions();
         } catch (SQLException throwables) {

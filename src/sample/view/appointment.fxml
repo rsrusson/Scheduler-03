@@ -71,7 +71,7 @@
             <TextField fx:id="endTxt" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <TextField fx:id="startTxt" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <TextField fx:id="typeTxt" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ComboBox fx:id="contactIdCB" editable="true" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <ComboBox fx:id="contactCB" editable="true" onAction="#contactCBAction" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
          </children>
       </GridPane>
       <TableView fx:id="appointmentsTableView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="120.0">
