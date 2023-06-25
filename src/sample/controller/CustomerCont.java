@@ -203,7 +203,7 @@ public class CustomerCont implements Initializable {
         CustomersDAO.setAllCustomers();
         customerTV.setItems(CustomersDAO.getAllCustomers());
         customerTV.refresh();
-        alertInfo("Message", "Customer is deleted", "Customer is deleted");
+        alertInfo("Warning", "Customer is deleted", "Customer is deleted");
     }
 
     @FXML

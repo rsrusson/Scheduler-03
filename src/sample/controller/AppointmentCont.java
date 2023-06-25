@@ -162,6 +162,10 @@ public class AppointmentCont implements Initializable {
             alertInfo("Error", "Business hours are between 0800 and 2200", "Please schedule an appointment within business hours");
             return;
         }
+        if (start.isAfter(end)){
+            alertInfo("Error", "Start time is after the end time.", "Please enter a start time before the end time");
+            return;
+        }
 
         for (Appointments thisAppointment : AppointmentsDAO.getAllAppointments()){
             if (thisAppointment.getCustomerId() == customerId){
@@ -238,6 +242,27 @@ public class AppointmentCont implements Initializable {
         int customerId = Integer.parseInt(customerIdTxt.getText());
         int userId = Integer.parseInt(userIdTxt.getText());
         int contactId = selectedContact.getContactId();
+
+        if (start.getHour() < 8 || start.getHour() > 22 || end.getHour() < 8 || end.getHour() > 22) {
+            alertInfo("Error", "Business hours are between 0800 and 2200", "Please schedule an appointment within business hours");
+            return;
+        }
+        if (start.isAfter(end)){
+            alertInfo("Error", "Start time is after the end time.", "Please enter a start time before the end time");
+            return;
+        }
+
+        for (Appointments thisAppointment : AppointmentsDAO.getAllAppointments()){
+            if (thisAppointment.getCustomerId() == customerId){
+                LocalDateTime existingStart = thisAppointment.getStart();
+                LocalDateTime existingEnd = thisAppointment.getEnd();
+
+                if ((start.isBefore(existingEnd) && end.isAfter(existingStart)) && thisAppointment.getAppointmentId() != appointmentId){
+                    alertInfo("Error", "This appointment overlaps for this customer", "Please input a non overlapping time for this appointment.");
+                    return;
+                }
+            }
+        }
 
         Appointments parsedAppointment = new Appointments(appointmentId, title, description, location, type, start, end, customerId, userId, contactId);
 

@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -50,6 +51,18 @@ public class LoginCont implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
 
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("Locales", Locale.getDefault());
+
+        if (Locale.getDefault().getLanguage().equals("en") || Locale.getDefault().getLanguage().equals("fr"))
+            System.out.println(resourceBundle.getString("", ""));
+        /*
+        ResourceBundle bundle;
+        boolean isFrench;
+        if(USER NOT FRENCH)
+            bundle = ResourceBundle.getBundle("Locales", Locale.getDefault);
+        else
+            bundle = ResourceBundle.getBundle("Locales", Locale.FRENCH);
+        */
     }
 
     static void alertInfo(String title, String headerText, String contentText){
