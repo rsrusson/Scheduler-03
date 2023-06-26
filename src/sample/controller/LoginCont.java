@@ -1,5 +1,7 @@
 package sample.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,10 +11,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import sample.Main;
+import sample.dao.UsersDAO;
+import sample.model.Users;
 
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Locale;
@@ -20,6 +25,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class LoginCont implements Initializable {
+
+    private ObservableList<Users> allUsers = FXCollections.observableArrayList();
 
     @FXML
     private TextField errorTxt;
@@ -54,6 +61,12 @@ public class LoginCont implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
 
+        try {
+            UsersDAO.setAllUsers();
+            allUsers = UsersDAO.getAllUsers();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
         ZoneId myId = ZonedDateTime.now().getZone();
 
@@ -101,7 +114,15 @@ public class LoginCont implements Initializable {
     @FXML
     void loginAction(ActionEvent event) throws IOException {
         boolean login = false;
-        if (login == true) {
+
+        for (Users user : allUsers) {
+            if (usernameTxt.getText().equals(user.getUserName()) && passwordTxt.getText().equals(user.getPassword())){
+                login = true;
+                break;
+            }
+        }
+
+        if (login) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/menu.fxml"));
             Parent root = loader.load();
             Stage currentStage = (Stage) loginBtt.getScene().getWindow();

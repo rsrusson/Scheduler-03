@@ -10,9 +10,16 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
+import sample.dao.AppointmentsDAO;
+import sample.model.Appointments;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Stack;
@@ -30,7 +37,26 @@ public class MenuCont implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            AppointmentsDAO.setAllAppointments();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
+        ZonedDateTime myZDT = ZonedDateTime.now();
+        ZoneId myZID = ZonedDateTime.now().getZone();
+        ZoneId estZID = ZoneId.of("America/New_York");
+        ZonedDateTime fifteenMinutesLater = myZDT.plusMinutes(15);
+
+        System.out.println(myZDT);
+        System.out.println(myZDT.toInstant());
+
+        for (Appointments appointment : AppointmentsDAO.getAllAppointments()){
+            if (appointment.getStart().atZone(myZID).isAfter(myZDT) && appointment.getStart().atZone(myZID).isBefore(fifteenMinutesLater)) {
+                alertInfo("Warning", "There is an appointment in 15 minutes or less", "Please prepare for the appointment");
+                break;
+            }
+        }
     }
 
     static void alertInfo(String title, String headerText, String contentText){
