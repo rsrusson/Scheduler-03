@@ -16,10 +16,14 @@ import java.util.ResourceBundle;
 
 public class Main extends Application {
 
+    private static ResourceBundle rb;
+
+    public static ResourceBundle getResourceBundle() {
+        return rb;
+    }
+
     @Override
     public void start(Stage primaryStage) throws IOException{
-
-        ResourceBundle rb;
 
         if (Locale.getDefault().getLanguage().equals("fr")) {
             rb = ResourceBundle.getBundle("sample.locale", new Locale("fr"));

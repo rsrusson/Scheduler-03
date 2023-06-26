@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import sample.Main;
 
 
 import java.io.IOException;
@@ -58,15 +59,19 @@ public class LoginCont implements Initializable {
 
         locationTxtLbl.setText(String.valueOf(myId));
 
+        String titleLblTxt = Main.getResourceBundle().getString("Schedule") + " " + Main.getResourceBundle().getString("Manager");
+        String usernameLblTxt = Main.getResourceBundle().getString("Username");
+        String passwordLblTxt = Main.getResourceBundle().getString("Password");
+        String loginBttTxt = Main.getResourceBundle().getString("Login");
+        String locationLblTxt = Main.getResourceBundle().getString("User") + " " + Main.getResourceBundle().getString("Location");
+        String exitBttTxt = Main.getResourceBundle().getString("Exit");
 
-        /*ResourceBundle rb = ResourceBundle.getBundle("sample.locale", Locale.getDefault());
-
-        if (Locale.getDefault().getLanguage().equals("fr")){
-
-        }*/
-
-        //resourceBundle = rb;
-
+        titleLbl.setText(titleLblTxt);
+        usernameLbl.setText(usernameLblTxt);
+        passwordLbl.setText(passwordLblTxt);
+        loginBtt.setText(loginBttTxt);
+        locationLbl.setText(locationLblTxt);
+        exitBtt.setText(exitBttTxt);
     }
 
     static void alertInfo(String title, String headerText, String contentText){
