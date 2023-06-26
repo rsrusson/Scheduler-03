@@ -18,22 +18,31 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("view/login.fxml"));
+
+        ResourceBundle rb;
+
+        if (Locale.getDefault().getLanguage().equals("fr")) {
+            rb = ResourceBundle.getBundle("sample.locale", new Locale("fr"));
+        } else {
+            rb = ResourceBundle.getBundle("sample.locale", new Locale("en"));
+        }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/login.fxml"));
+        loader.setResources(rb);
+
+        Parent root = loader.load();
         primaryStage.setTitle("Scheduler Application");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 
-
     public static void main(String[] args) throws SQLException {
         JDBC.openConnection();
 
-        ResourceBundle rb = ResourceBundle.getBundle("sample/locale", Locale.getDefault());
-
-        System.out.println(rb.getString("Schedule"));
+        ResourceBundle rb = ResourceBundle.getBundle("sample.locale", Locale.getDefault());
 
         if (Locale.getDefault().getLanguage().equals("en") || Locale.getDefault().getLanguage().equals("fr")){
-            System.out.println(rb.getString("Schedule") + " " + rb.getString("Username"));
+            System.out.println(rb.getString("Schedule") + " " + rb.getString("User"));
         }
 
         launch(args);

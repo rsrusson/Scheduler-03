@@ -59,7 +59,11 @@ public class LoginCont implements Initializable {
         locationTxtLbl.setText(String.valueOf(myId));
 
 
-        //ResourceBundle.getBundle("locale", Locale.getDefault());
+        /*ResourceBundle rb = ResourceBundle.getBundle("sample.locale", Locale.getDefault());
+
+        if (Locale.getDefault().getLanguage().equals("fr")){
+
+        }*/
 
         //resourceBundle = rb;
 
