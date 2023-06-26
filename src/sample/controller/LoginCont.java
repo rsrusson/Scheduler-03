@@ -95,16 +95,22 @@ public class LoginCont implements Initializable {
 
     @FXML
     void exitAction(ActionEvent event) {
-        exitConfirmation("Warning!", "Exit initiated", "Are you sure you want to exit?");
+        exitConfirmation(Main.getResourceBundle().getString("Warning"), Main.getResourceBundle().getString("Exit"), Main.getResourceBundle().getString("Confirm"));
     }
 
     @FXML
     void loginAction(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/menu.fxml"));
-        Parent root = loader.load();
-        Stage currentStage = (Stage) loginBtt.getScene().getWindow();
-        currentStage.setScene(new Scene(root));
-        currentStage.show();
+        boolean login = false;
+        if (login == true) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/menu.fxml"));
+            Parent root = loader.load();
+            Stage currentStage = (Stage) loginBtt.getScene().getWindow();
+            currentStage.setScene(new Scene(root));
+            currentStage.show();
+        } else {
+            alertInfo(Main.getResourceBundle().getString("Warning"), Main.getResourceBundle().getString("Incorrect") + Main.getResourceBundle().getString("Credentials"), Main.getResourceBundle().getString("Try") + Main.getResourceBundle().getString("Again"));
+            return;
+        }
     }
 
     public TextField getErrorTxt() {
