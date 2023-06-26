@@ -51,10 +51,10 @@ public class LoginCont implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
 
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("Locales", Locale.getDefault());
+        //ResourceBundle resourceBundle = ResourceBundle.getBundle("Locales", Locale.getDefault());
 
-        if (Locale.getDefault().getLanguage().equals("en") || Locale.getDefault().getLanguage().equals("fr"))
-            System.out.println(resourceBundle.getString("", ""));
+        //if (Locale.getDefault().getLanguage().equals("en") || Locale.getDefault().getLanguage().equals("fr"))
+        //    System.out.println(resourceBundle.getString("", ""));
         /*
         ResourceBundle bundle;
         boolean isFrench;
