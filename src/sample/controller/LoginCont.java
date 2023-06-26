@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -28,7 +30,7 @@ public class LoginCont implements Initializable {
     private Label locationLbl;
 
     @FXML
-    private TextField locationTxt;
+    private Label locationTxtLbl;
 
     @FXML
     private Button loginBtt;
@@ -51,18 +53,16 @@ public class LoginCont implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
 
-        //ResourceBundle resourceBundle = ResourceBundle.getBundle("Locales", Locale.getDefault());
 
-        //if (Locale.getDefault().getLanguage().equals("en") || Locale.getDefault().getLanguage().equals("fr"))
-        //    System.out.println(resourceBundle.getString("", ""));
-        /*
-        ResourceBundle bundle;
-        boolean isFrench;
-        if(USER NOT FRENCH)
-            bundle = ResourceBundle.getBundle("Locales", Locale.getDefault);
-        else
-            bundle = ResourceBundle.getBundle("Locales", Locale.FRENCH);
-        */
+        ZoneId myId = ZonedDateTime.now().getZone();
+
+        locationTxtLbl.setText(String.valueOf(myId));
+
+
+        //ResourceBundle.getBundle("locale", Locale.getDefault());
+
+        //resourceBundle = rb;
+
     }
 
     static void alertInfo(String title, String headerText, String contentText){
@@ -122,12 +122,11 @@ public class LoginCont implements Initializable {
         this.locationLbl = locationLbl;
     }
 
-    public TextField getLocationTxt() {
-        return locationTxt;
+    public Label getLocationTxt() {
+        return locationTxtLbl;
     }
 
-    public void setLocationTxt(TextField locationTxt) {
-        this.locationTxt = locationTxt;
+    public void setLocationTxt(String locationString) {
     }
 
     public Button getLoginBtt() {

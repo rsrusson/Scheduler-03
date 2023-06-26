@@ -11,6 +11,8 @@ import sample.helper.JDBC;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Main extends Application {
 
@@ -25,6 +27,14 @@ public class Main extends Application {
 
     public static void main(String[] args) throws SQLException {
         JDBC.openConnection();
+
+        ResourceBundle rb = ResourceBundle.getBundle("sample/locale", Locale.getDefault());
+
+        System.out.println(rb.getString("Schedule"));
+
+        if (Locale.getDefault().getLanguage().equals("en") || Locale.getDefault().getLanguage().equals("fr")){
+            System.out.println(rb.getString("Schedule") + " " + rb.getString("Username"));
+        }
 
         launch(args);
 

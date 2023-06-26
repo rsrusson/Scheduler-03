@@ -44,7 +44,7 @@
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <Label fx:id="locationLbl" text="User Location: " />
-                        <TextField fx:id="locationTxt" />
+                        <Label fx:id="locationTxtLbl" />
                      </children>
                   </HBox>
                   <TextField fx:id="errorTxt" editable="false" visible="false" />
