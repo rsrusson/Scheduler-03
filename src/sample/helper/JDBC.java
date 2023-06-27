@@ -3,6 +3,9 @@ package sample.helper;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+/**
+ * The JDBC class provides utility methods for managing the database connection.
+ */
 public abstract class JDBC {
 
     private static final String protocol = "jdbc";
@@ -15,6 +18,9 @@ public abstract class JDBC {
     private static String password = "Passw0rd!"; // Password
     public static Connection connection;  // Connection Interface
 
+    /**
+     * Opens a connection to the database.
+     */
     public static void openConnection()
     {
         try {
@@ -28,6 +34,9 @@ public abstract class JDBC {
         }
     }
 
+    /**
+     * Closes the database connection.
+     */
     public static void closeConnection() {
         try {
             connection.close();

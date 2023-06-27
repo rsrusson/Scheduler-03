@@ -15,15 +15,21 @@ import sample.dao.UsersDAO;
 import sample.model.Users;
 
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * Controller class for the login functionality.
+ */
 public class LoginCont implements Initializable {
 
     private ObservableList<Users> allUsers = FXCollections.observableArrayList();
@@ -58,6 +64,12 @@ public class LoginCont implements Initializable {
     @FXML
     private TextField usernameTxt;
 
+    /**
+     * Initializes the LoginCont controller.
+     *
+     * @param url            The location used to resolve relative paths for the root object.
+     * @param resourceBundle The resources used to localize the root object.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
 
@@ -87,6 +99,13 @@ public class LoginCont implements Initializable {
         exitBtt.setText(exitBttTxt);
     }
 
+    /**
+     * Displays an information alert dialog with the given title, header text, and content text.
+     *
+     * @param title       The title of the alert.
+     * @param headerText  The header text of the alert.
+     * @param contentText The content text of the alert.
+     */
     static void alertInfo(String title, String headerText, String contentText){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -95,6 +114,14 @@ public class LoginCont implements Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * Displays a confirmation dialog with the given title, header text, and content text to confirm the exit action.
+     * If the user chooses to exit, the application is closed.
+     *
+     * @param title       The title of the confirmation dialog.
+     * @param headerText  The header text of the confirmation dialog.
+     * @param contentText The content text of the confirmation dialog.
+     */
     static void exitConfirmation(String title, String headerText, String contentText){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(title);
@@ -106,11 +133,24 @@ public class LoginCont implements Initializable {
             System.exit(0);
     }
 
+    /**
+     * Handles the action event when the exit button is clicked.
+     * Displays a confirmation dialog to confirm the exit action.
+     *
+     * @param event The action event.
+     */
     @FXML
     void exitAction(ActionEvent event) {
         exitConfirmation(Main.getResourceBundle().getString("Warning"), Main.getResourceBundle().getString("Exit"), Main.getResourceBundle().getString("Confirm"));
     }
 
+    /**
+     * Handles the action event when the login button is clicked.
+     * Performs the login functionality by checking the username and password entered by the user.
+     * If the login is successful, it loads the menu view.
+     *
+     * @param event The action event.
+     */
     @FXML
     void loginAction(ActionEvent event) throws IOException {
         boolean login = false;
@@ -120,6 +160,18 @@ public class LoginCont implements Initializable {
                 login = true;
                 break;
             }
+        }
+
+        String username = usernameTxt.getText();
+        String password = passwordTxt.getText();
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter("login_activity.txt", true))) {
+            writer.print("Username: " + username + " ");
+            writer.print("Password: " + password + " ");
+            writer.print("Successful: " + login + " ");
+            writer.println("Login time: " + LocalDateTime.now());
+        } catch (IOException e) {
+            alertInfo("Error", "Unable to record this login to login_activity.txt", "Please ensure file path is correct");
         }
 
         if (login) {
@@ -134,82 +186,4 @@ public class LoginCont implements Initializable {
         }
     }
 
-    public TextField getErrorTxt() {
-        return errorTxt;
-    }
-
-    public void setErrorTxt(TextField errorTxt) {
-        this.errorTxt = errorTxt;
-    }
-
-    public Button getExitBtt() {
-        return exitBtt;
-    }
-
-    public void setExitBtt(Button exitBtt) {
-        this.exitBtt = exitBtt;
-    }
-
-    public Label getLocationLbl() {
-        return locationLbl;
-    }
-
-    public void setLocationLbl(Label locationLbl) {
-        this.locationLbl = locationLbl;
-    }
-
-    public Label getLocationTxt() {
-        return locationTxtLbl;
-    }
-
-    public void setLocationTxt(String locationString) {
-    }
-
-    public Button getLoginBtt() {
-        return loginBtt;
-    }
-
-    public void setLoginBtt(Button loginBtt) {
-        this.loginBtt = loginBtt;
-    }
-
-    public Label getPasswordLbl() {
-        return passwordLbl;
-    }
-
-    public void setPasswordLbl(Label passwordLbl) {
-        this.passwordLbl = passwordLbl;
-    }
-
-    public TextField getPasswordTxt() {
-        return passwordTxt;
-    }
-
-    public void setPasswordTxt(TextField passwordTxt) {
-        this.passwordTxt = passwordTxt;
-    }
-
-    public Label getTitleLbl() {
-        return titleLbl;
-    }
-
-    public void setTitleLbl(Label titleLbl) {
-        this.titleLbl = titleLbl;
-    }
-
-    public Label getUsernameLbl() {
-        return usernameLbl;
-    }
-
-    public void setUsernameLbl(Label usernameLbl) {
-        this.usernameLbl = usernameLbl;
-    }
-
-    public TextField getUsernameTxt() {
-        return usernameTxt;
-    }
-
-    public void setUsernameTxt(TextField usernameTxt) {
-        this.usernameTxt = usernameTxt;
-    }
 }

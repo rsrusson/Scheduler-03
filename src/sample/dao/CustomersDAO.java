@@ -10,14 +10,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+/**
+ * The data access object (DAO) class for managing customers.
+ */
 public class CustomersDAO {
 
     private static ObservableList<Customers> allCustomers = FXCollections.observableArrayList();
 
+    /**
+     * Retrieves all customers.
+     *
+     * @return The list of all customers.
+     */
     public static ObservableList<Customers> getAllCustomers() {
         return allCustomers;
     }
 
+    /**
+     * Adds a new customer to the database.
+     *
+     * @param newCustomer The new customer to add.
+     */
     public static void addCustomer(Customers newCustomer) throws SQLException {
         String sql = "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Division_ID)\n" +
                 "VALUES (?, ?, ?, ?, ?);";
@@ -30,6 +43,11 @@ public class CustomersDAO {
         preparedStatement.executeUpdate();
     }
 
+    /**
+     * Deletes a customer from the database.
+     *
+     * @param oldCustomer The customer to delete.
+     */
     public static void deleteCustomer(Customers oldCustomer) throws SQLException {
         String sql = "DELETE FROM customers WHERE Customer_ID = ?;";
         PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
@@ -37,6 +55,10 @@ public class CustomersDAO {
         preparedStatement.executeUpdate();
     }
 
+    /**
+     * Sets the list of all customers by querying the database.
+     *
+     */
     public static void setAllCustomers() throws SQLException {
         String sql = "SELECT customers.Customer_ID, customers.Customer_Name, customers.Address, customers.Postal_Code, customers.Phone, customers.Division_ID, first_level_divisions.country_id\n" +
                 "FROM customers\n" +
@@ -57,6 +79,11 @@ public class CustomersDAO {
         }
     }
 
+    /**
+     * Updates a customer in the database.
+     *
+     * @param updatedCustomer The updated customer information.
+     */
     public static void updateCustomer(Customers updatedCustomer) throws SQLException {
         String sql = "UPDATE customers SET Customer_ID = ?, Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? WHERE Customer_ID = ?;";
         PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);

@@ -9,14 +9,26 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * The data access object (DAO) class for managing users.
+ */
 public class UsersDAO {
 
     private static ObservableList<Users> allUsers = FXCollections.observableArrayList();
 
+    /**
+     * Retrieves all users.
+     *
+     * @return The list of all users.
+     */
     public static ObservableList<Users> getAllUsers() {
         return allUsers;
     }
 
+    /**
+     * Sets the list of all users by querying the database.
+     *
+     */
     public static void setAllUsers() throws SQLException {
         String sql = "SELECT * FROM users;";
         PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);

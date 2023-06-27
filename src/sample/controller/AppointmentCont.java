@@ -24,6 +24,10 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
+/**
+ * Controller class for managing appointments.
+ * Implements the Initializable interface to initialize the screen.
+ */
 public class AppointmentCont implements Initializable {
 
     private Contacts selectedContact;
@@ -106,6 +110,13 @@ public class AppointmentCont implements Initializable {
     @FXML
     private RadioButton byWeekBtt;
 
+    /**
+     * Displays an information alert.
+     *
+     * @param title        the title of the alert
+     * @param headerText   the header text of the alert
+     * @param contentText  the content text of the alert
+     */
     static void alertInfo(String title, String headerText, String contentText){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -114,10 +125,18 @@ public class AppointmentCont implements Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * Sets the contact combo box with all available contacts.
+     */
     public void setContactCB() {
         contactCB.setItems(ContactsDAO.getAllContacts());
     }
 
+    /**
+     * Event handler for the contact combo box selection.
+     *
+     * @param event  the ActionEvent triggered by the combo box selection
+     */
     @FXML
     void contactCBAction(ActionEvent event) {
         for (Contacts thisContact : ContactsDAO.getAllContacts()) {
@@ -126,6 +145,12 @@ public class AppointmentCont implements Initializable {
         }
     }
 
+    /**
+     * Event handler for the "All Appointments" radio button.
+     * Retrieves and displays all appointments.
+     *
+     * @param event  the ActionEvent triggered by selecting the radio button
+     */
     @FXML
     void allAppointmentAction(ActionEvent event) throws SQLException {
         appointmentsTableView.getItems().clear();
@@ -135,6 +160,12 @@ public class AppointmentCont implements Initializable {
         appointmentsTableView.refresh();
     }
 
+    /**
+     * Event handler for the "By Month" radio button.
+     * Retrieves and displays appointments for the current month.
+     *
+     * @param event  the ActionEvent triggered by selecting the radio button
+     */
     @FXML
     void byMonthAction(ActionEvent event) throws SQLException {
         appointmentsTableView.getItems().clear();
@@ -143,6 +174,12 @@ public class AppointmentCont implements Initializable {
         appointmentsTableView.refresh();
     }
 
+    /**
+     * Event handler for the "By Week" radio button.
+     * Retrieves and displays appointments for the current week.
+     *
+     * @param event  the ActionEvent triggered by selecting the radio button
+     */
     @FXML
     void byWeekAction(ActionEvent event) throws SQLException {
         appointmentsTableView.getItems().clear();
@@ -151,6 +188,12 @@ public class AppointmentCont implements Initializable {
         appointmentsTableView.refresh();
     }
 
+    /**
+     * Event handler for the "Add" button.
+     * Adds a new appointment.
+     *
+     * @param event  the ActionEvent triggered by clicking the button
+     */
     @FXML
     void addAction(ActionEvent event) throws SQLException {
         ZoneId eastId = ZoneId.of("America/New_York");
@@ -168,12 +211,11 @@ public class AppointmentCont implements Initializable {
         int userId = Integer.parseInt(userIdTxt.getText());
         int contactId = selectedContact.getContactId();
 
-        /*
         if (start.withZoneSameInstant(eastId).getHour() < 8 || start.withZoneSameInstant(eastId).getHour() > 22 || end.withZoneSameInstant(eastId).getHour() < 8 || end.withZoneSameInstant(eastId).getHour() > 22) {
             alertInfo("Error", "Business hours are between 0800 and 2200", "Please schedule an appointment within business hours");
             return;
         }
-        */
+
         if (start.isAfter(end)){
             alertInfo("Error", "Start time is after the end time.", "Please enter a start time before the end time");
             return;
@@ -209,6 +251,12 @@ public class AppointmentCont implements Initializable {
         }
     }
 
+    /**
+     * Event handler for the "Delete" button.
+     * Deletes the selected appointment.
+     *
+     * @param event  the ActionEvent triggered by clicking the button
+     */
     @FXML
     void deleteAction(ActionEvent event) throws SQLException {
         Appointments selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
@@ -230,6 +278,12 @@ public class AppointmentCont implements Initializable {
         }
     }
 
+    /**
+     * Event handler for the "Menu" button.
+     * Navigates back to the main menu.
+     *
+     * @param event  the ActionEvent triggered by clicking the button
+     */
     @FXML
     void menuAction(ActionEvent event) throws IOException {
         appointmentsTableView.getItems().clear();
@@ -242,6 +296,12 @@ public class AppointmentCont implements Initializable {
         currentStage.show();
     }
 
+    /**
+     * Event handler for the "Update" button.
+     * Updates an existing appointment.
+     *
+     * @param event  the ActionEvent triggered by clicking the button
+     */
     @FXML
     void updateAction(ActionEvent event) throws SQLException{
         ZoneId eastId = ZoneId.of("America/New_York");
@@ -260,12 +320,12 @@ public class AppointmentCont implements Initializable {
         int userId = Integer.parseInt(userIdTxt.getText());
         int contactId = selectedContact.getContactId();
 
-        /*
+
         if (start.withZoneSameInstant(eastId).getHour() < 8 || start.withZoneSameInstant(eastId).getHour() > 22 || end.withZoneSameInstant(eastId).getHour() < 8 || end.withZoneSameInstant(eastId).getHour() > 22) {
             alertInfo("Error", "Business hours are between 0800 and 2200 Eastern Standard Time", "Please schedule an appointment within business hours");
             return;
         }
-        */
+
         if (start.isAfter(end)){
             alertInfo("Error", "Start time is after the end time.", "Please enter a start time before the end time");
             return;
@@ -303,6 +363,13 @@ public class AppointmentCont implements Initializable {
     }
 
 
+    /**
+     * Initializes the appointment management screen.
+     * Retrieves and sets all available contacts and contact IDs.
+     *
+     * @param url             the location used to resolve relative paths
+     * @param resourceBundle  the resources used to localize the root object
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {

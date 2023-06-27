@@ -10,6 +10,9 @@ import sample.model.Appointments;
 import java.sql.*;
 import java.time.*;
 
+/**
+ * The data access object (DAO) class for managing appointments.
+ */
 public class AppointmentsDAO {
 
     private static ObservableList<Appointments> allAppointments = FXCollections.observableArrayList();
@@ -18,10 +21,19 @@ public class AppointmentsDAO {
 
     private static ObservableList<Appointments> byWeekAppointments = FXCollections.observableArrayList();
 
+    /**
+     * Retrieves all appointments.
+     *
+     * @return The list of all appointments.
+     */
     public static ObservableList<Appointments> getAllAppointments(){
         return allAppointments;
     }
 
+    /**
+     * Sets the list of all appointments by querying the database.
+     *
+     */
     public static void setAllAppointments() throws SQLException{
         String sql = "SELECT * FROM appointments";
         PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
@@ -52,10 +64,19 @@ public class AppointmentsDAO {
         }
     }
 
+    /**
+     * Retrieves the appointments filtered by month.
+     *
+     * @return The list of appointments filtered by month.
+     */
     public static ObservableList<Appointments> getByMonthAppointments() {
         return byMonthAppointments;
     }
 
+    /**
+     * Sets the list of appointments filtered by month by querying the database.
+     *
+     */
     public static void setByMonthAppointments() throws SQLException {
 
         String sql = "SELECT * FROM appointments WHERE Start >= CURDATE() AND Start <= CURDATE() + INTERVAL 1 MONTH;";
@@ -87,10 +108,19 @@ public class AppointmentsDAO {
         }
     }
 
+    /**
+     * Retrieves the appointments filtered by week.
+     *
+     * @return The list of appointments filtered by week.
+     */
     public static ObservableList<Appointments> getByWeekAppointments() {
         return byWeekAppointments;
     }
 
+    /**
+     * Sets the list of appointments filtered by week by querying the database.
+     *
+     */
     public static void setByWeekAppointments() throws SQLException {
         String sql = "SELECT * FROM appointments WHERE Start >= CURDATE() AND Start <= CURDATE() + INTERVAL 1 WEEK;";
         PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
@@ -120,6 +150,12 @@ public class AppointmentsDAO {
             byWeekAppointments.add(appointment);
         }
     }
+
+    /**
+     * Adds a new appointment to the database.
+     *
+     * @param newAppointment The new appointment to be added.
+     */
     public static void addAppointment(Appointments newAppointment) throws SQLException {
         String sql = "INSERT INTO appointments(Title, Description, Location, `Type`, Start, End, Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
@@ -138,6 +174,11 @@ public class AppointmentsDAO {
 
     }
 
+    /**
+     * Updates an existing appointment in the database.
+     *
+     * @param updatedAppointment The updated appointment.
+     */
     public static void updateAppointment(Appointments updatedAppointment) throws SQLException {
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, `Type` = ?, Start = ?, End = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
         PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
@@ -157,10 +198,15 @@ public class AppointmentsDAO {
 
     }
 
-        public static void deleteAppointment(Appointments selectedAppointment) throws SQLException {
-            String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
-            PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
-            preparedStatement.setInt(1, selectedAppointment.getAppointmentId());
-            preparedStatement.executeUpdate();
-        }
+    /**
+     * Deletes an appointment from the database.
+     *
+     * @param selectedAppointment The appointment to be deleted.
+     */
+    public static void deleteAppointment(Appointments selectedAppointment) throws SQLException {
+        String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
+        PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sql);
+        preparedStatement.setInt(1, selectedAppointment.getAppointmentId());
+        preparedStatement.executeUpdate();
+    }
 }

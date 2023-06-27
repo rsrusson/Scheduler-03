@@ -14,14 +14,27 @@ import java.sql.SQLException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * The Main class is the entry point of the application and defines the main JavaFX application lifecycle methods.
+ */
 public class Main extends Application {
 
     private static ResourceBundle rb;
 
+    /**
+     * Retrieves the resource bundle used for localization.
+     *
+     * @return The resource bundle.
+     */
     public static ResourceBundle getResourceBundle() {
         return rb;
     }
 
+    /**
+     * The main entry point for the JavaFX application.
+     *
+     * @param primaryStage The primary stage for the application.
+     */
     @Override
     public void start(Stage primaryStage) throws IOException{
 
@@ -40,6 +53,11 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    /**
+     * The main method that launches the JavaFX application.
+     *
+     * @param args The command-line arguments.
+     */
     public static void main(String[] args) throws SQLException {
         JDBC.openConnection();
 
