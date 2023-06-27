@@ -171,7 +171,7 @@ public class LoginCont implements Initializable {
             writer.print("Successful: " + login + " ");
             writer.println("Login time: " + LocalDateTime.now());
         } catch (IOException e) {
-            alertInfo("Error", "Unable to record this login to login_activity.txt", "Please ensure file path is correct");
+            alertInfo(Main.getResourceBundle().getString("Activity_Error_Title"), Main.getResourceBundle().getString("Activity_Error_Header"), Main.getResourceBundle().getString("Activity_Error_Text"));
         }
 
         if (login) {

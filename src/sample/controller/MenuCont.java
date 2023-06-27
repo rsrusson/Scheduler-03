@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
+import sample.Main;
 import sample.dao.AppointmentsDAO;
 import sample.model.Appointments;
 
@@ -65,12 +66,12 @@ public class MenuCont implements Initializable {
                     appointment.getStart().toLocalDateTime().isAfter(myZDT.toLocalDateTime())) &&
                     appointment.getStart().toLocalDateTime().isBefore(fifteenMinutesLater.toLocalDateTime())) {
                 closeAppointment = true;
-                alertInfo("Warning", "There is an appointment in 15 minutes or less", "ID: " + String.valueOf(appointment.getAppointmentId()) + " " + "Hour: " + String.valueOf(appointment.getStart().getHour()) + " " + "Minute: " + String.valueOf(appointment.getStart().getMinute()));
+                alertInfo(Main.getResourceBundle().getString("Warning"), Main.getResourceBundle().getString("Appointment_Header"), Main.getResourceBundle().getString("ID") + String.valueOf(appointment.getAppointmentId()) + " " + Main.getResourceBundle().getString("Hour") + String.valueOf(appointment.getStart().getHour()) + " " + Main.getResourceBundle().getString("Minute") + String.valueOf(appointment.getStart().getMinute()));
                 break;
             }
         }
         if (!closeAppointment)
-        alertInfo("Notice", "There are no upcoming appointments", "Enjoy your free time!");
+            alertInfo(Main.getResourceBundle().getString("Warning"), Main.getResourceBundle().getString("Free_Header"), Main.getResourceBundle().getString("Free_Text"));
     }
 
     /**
