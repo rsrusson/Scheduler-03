@@ -267,6 +267,8 @@ public class CustomerCont implements Initializable {
         customerTV.getItems().clear();
         divisionCB.getItems().clear();
         countryCB.getItems().clear();
+        CustomersDAO.getAllCustomers().clear();
+        AppointmentsDAO.getAllAppointments().clear();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/menu.fxml"));
         Parent root = loader.load();

@@ -170,8 +170,6 @@ public class AppointmentsDAO {
         preparedStatement.setInt(9, newAppointment.getContactId());
         preparedStatement.executeUpdate();
 
-        System.out.println("Start in add SQL " + Timestamp.valueOf(newAppointment.getStart().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()));
-
     }
 
     /**
@@ -193,9 +191,6 @@ public class AppointmentsDAO {
         preparedStatement.setInt(9, updatedAppointment.getContactId());
         preparedStatement.setInt(10, updatedAppointment.getAppointmentId());
         preparedStatement.executeUpdate();
-
-        System.out.println("Start in update SQL " + Timestamp.valueOf(updatedAppointment.getStart().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()));
-
     }
 
     /**

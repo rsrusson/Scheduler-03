@@ -262,6 +262,7 @@ public class AppointmentCont implements Initializable {
         Appointments selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
 
         AppointmentsDAO.deleteAppointment(selectedAppointment);
+        alertInfo("Warning", "Appointment is deleted", "Appointment is deleted");
         appointmentsTableView.getItems().clear();
         if (allAppointmentBtt.isSelected()) {
             AppointmentsDAO.setAllAppointments();
@@ -288,6 +289,7 @@ public class AppointmentCont implements Initializable {
     void menuAction(ActionEvent event) throws IOException {
         appointmentsTableView.getItems().clear();
         contactCB.getItems().removeAll(ContactsDAO.getAllContacts());
+        AppointmentsDAO.getAllAppointments().clear();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/menu.fxml"));
         Parent root = loader.load();

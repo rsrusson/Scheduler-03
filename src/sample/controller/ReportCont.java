@@ -256,6 +256,8 @@ public class ReportCont implements Initializable {
      */
     @FXML
     void menuAction(ActionEvent event) throws IOException {
+        AppointmentsDAO.getAllAppointments().clear();
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/menu.fxml"));
         Parent root = loader.load();
         Stage currentStage = (Stage) menuBtt.getScene().getWindow();
