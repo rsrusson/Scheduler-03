@@ -2,6 +2,7 @@ package sample.model;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class Appointments {
 
@@ -10,8 +11,8 @@ public class Appointments {
     private String description;
     private String location;
     private String type;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private ZonedDateTime start;
+    private ZonedDateTime end;
     //private LocalDateTime createDate;
     //private String createdBy;
     //private Timestamp lastUpdate;
@@ -20,7 +21,7 @@ public class Appointments {
     private int userId;
     private int contactId;
 
-    public Appointments(int appointmentId, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, int customerId, int userId, int contactId) {
+    public Appointments(int appointmentId, String title, String description, String location, String type, ZonedDateTime start, ZonedDateTime end, int customerId, int userId, int contactId) {
         this.appointmentId = appointmentId;
         this.title = title;
         this.description = description;
@@ -33,7 +34,7 @@ public class Appointments {
         this.contactId = contactId;
     }
 
-    public Appointments(String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, int customerId, int userId, int contactId) {
+    public Appointments(String title, String description, String location, String type, ZonedDateTime start, ZonedDateTime end, int customerId, int userId, int contactId) {
 
         this.title = title;
         this.description = description;
@@ -86,19 +87,19 @@ public class Appointments {
         this.type = type;
     }
 
-    public LocalDateTime getStart() {
+    public ZonedDateTime getStart() {
         return start;
     }
 
-    public void setStart(LocalDateTime start) {
+    public void setStart(ZonedDateTime start) {
         this.start = start;
     }
 
-    public LocalDateTime getEnd() {
+    public ZonedDateTime getEnd() {
         return end;
     }
 
-    public void setEnd(LocalDateTime end) {
+    public void setEnd(ZonedDateTime end) {
         this.end = end;
     }
 

@@ -8,7 +8,7 @@ import sample.helper.JDBC;
 import sample.model.Appointments;
 
 import java.sql.*;
-import java.time.LocalDateTime;
+import java.time.*;
 
 public class AppointmentsDAO {
 
@@ -32,8 +32,17 @@ public class AppointmentsDAO {
             String description = resultSet.getString("Description");
             String location = resultSet.getString("Location");
             String type = resultSet.getString("Type");
-            LocalDateTime start = resultSet.getTimestamp("Start").toLocalDateTime();
-            LocalDateTime end = resultSet.getTimestamp("End").toLocalDateTime();
+
+            Timestamp startTimestamp = resultSet.getTimestamp("Start");
+            LocalDateTime startLocalDateTime = startTimestamp.toLocalDateTime();
+            ZonedDateTime startUTC = ZonedDateTime.of(startLocalDateTime, ZoneOffset.UTC);
+            ZonedDateTime start = startUTC;
+
+            Timestamp endTimestamp = resultSet.getTimestamp("End");
+            LocalDateTime endLocalDateTime = endTimestamp.toLocalDateTime();
+            ZonedDateTime endUTC = ZonedDateTime.of(endLocalDateTime, ZoneOffset.UTC);
+            ZonedDateTime end = endUTC;
+
             int customerId = resultSet.getInt("Customer_ID");
             int userId = resultSet.getInt("User_ID");
             int contactId = resultSet.getInt("Contact_ID");
@@ -58,8 +67,17 @@ public class AppointmentsDAO {
             String description = resultSet.getString("Description");
             String location = resultSet.getString("Location");
             String type = resultSet.getString("Type");
-            LocalDateTime start = resultSet.getTimestamp("Start").toLocalDateTime();
-            LocalDateTime end = resultSet.getTimestamp("End").toLocalDateTime();
+
+            Timestamp startTimestamp = resultSet.getTimestamp("Start");
+            LocalDateTime startLocalDateTime = startTimestamp.toLocalDateTime();
+            ZonedDateTime startUTC = ZonedDateTime.of(startLocalDateTime, ZoneOffset.UTC);
+            ZonedDateTime start = startUTC;
+
+            Timestamp endTimestamp = resultSet.getTimestamp("End");
+            LocalDateTime endLocalDateTime = endTimestamp.toLocalDateTime();
+            ZonedDateTime endUTC = ZonedDateTime.of(endLocalDateTime, ZoneOffset.UTC);
+            ZonedDateTime end = endUTC;
+
             int customerId = resultSet.getInt("Customer_ID");
             int userId = resultSet.getInt("User_ID");
             int contactId = resultSet.getInt("Contact_ID");
@@ -83,8 +101,17 @@ public class AppointmentsDAO {
             String description = resultSet.getString("Description");
             String location = resultSet.getString("Location");
             String type = resultSet.getString("Type");
-            LocalDateTime start = resultSet.getTimestamp("Start").toLocalDateTime();
-            LocalDateTime end = resultSet.getTimestamp("End").toLocalDateTime();
+
+            Timestamp startTimestamp = resultSet.getTimestamp("Start");
+            LocalDateTime startLocalDateTime = startTimestamp.toLocalDateTime();
+            ZonedDateTime startUTC = ZonedDateTime.of(startLocalDateTime, ZoneOffset.UTC);
+            ZonedDateTime start = startUTC;
+
+            Timestamp endTimestamp = resultSet.getTimestamp("End");
+            LocalDateTime endLocalDateTime = endTimestamp.toLocalDateTime();
+            ZonedDateTime endUTC = ZonedDateTime.of(endLocalDateTime, ZoneOffset.UTC);
+            ZonedDateTime end = endUTC;
+
             int customerId = resultSet.getInt("Customer_ID");
             int userId = resultSet.getInt("User_ID");
             int contactId = resultSet.getInt("Contact_ID");
@@ -100,12 +127,15 @@ public class AppointmentsDAO {
         preparedStatement.setString(2, newAppointment.getDescription());
         preparedStatement.setString(3, newAppointment.getLocation());
         preparedStatement.setString(4, newAppointment.getType());
-        preparedStatement.setTimestamp(5, Timestamp.valueOf(newAppointment.getStart()));
-        preparedStatement.setTimestamp(6, Timestamp.valueOf(newAppointment.getEnd()));
+        preparedStatement.setTimestamp(5, Timestamp.valueOf(newAppointment.getStart().toLocalDateTime()));
+        preparedStatement.setTimestamp(6, Timestamp.valueOf(newAppointment.getEnd().toLocalDateTime()));
         preparedStatement.setInt(7, newAppointment.getCustomerId());
         preparedStatement.setInt(8, newAppointment.getUserId());
         preparedStatement.setInt(9, newAppointment.getContactId());
         preparedStatement.executeUpdate();
+
+        System.out.println("Start in add SQL " + Timestamp.valueOf(newAppointment.getStart().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()));
+
     }
 
     public static void updateAppointment(Appointments updatedAppointment) throws SQLException {
@@ -115,16 +145,17 @@ public class AppointmentsDAO {
         preparedStatement.setString(2, updatedAppointment.getDescription());
         preparedStatement.setString(3, updatedAppointment.getLocation());
         preparedStatement.setString(4, updatedAppointment.getType());
-        preparedStatement.setTimestamp(5, Timestamp.valueOf(updatedAppointment.getStart()));
-        preparedStatement.setTimestamp(6, Timestamp.valueOf(updatedAppointment.getEnd()));
+        preparedStatement.setTimestamp(5, Timestamp.valueOf(updatedAppointment.getStart().toLocalDateTime()));
+        preparedStatement.setTimestamp(6, Timestamp.valueOf(updatedAppointment.getEnd().toLocalDateTime()));
         preparedStatement.setInt(7, updatedAppointment.getCustomerId());
         preparedStatement.setInt(8, updatedAppointment.getUserId());
         preparedStatement.setInt(9, updatedAppointment.getContactId());
         preparedStatement.setInt(10, updatedAppointment.getAppointmentId());
         preparedStatement.executeUpdate();
 
-        System.out.println(preparedStatement.toString());
-        }
+        System.out.println("Start in update SQL " + Timestamp.valueOf(updatedAppointment.getStart().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()));
+
+    }
 
         public static void deleteAppointment(Appointments selectedAppointment) throws SQLException {
             String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";

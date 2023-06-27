@@ -18,6 +18,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class AppointmentCont implements Initializable {
@@ -52,7 +56,7 @@ public class AppointmentCont implements Initializable {
     private TextField descriptionTxt;
 
     @FXML
-    private TableColumn<Appointments, LocalDateTime> endCol;
+    private TableColumn<Appointments, ZonedDateTime> endCol;
 
     @FXML
     private TextField endTxt;
@@ -64,7 +68,7 @@ public class AppointmentCont implements Initializable {
     private TextField locationTxt;
 
     @FXML
-    private TableColumn<Appointments, LocalDateTime> startCol;
+    private TableColumn<Appointments, ZonedDateTime> startCol;
 
     @FXML
     private TextField startTxt;
@@ -125,7 +129,8 @@ public class AppointmentCont implements Initializable {
     @FXML
     void allAppointmentAction(ActionEvent event) throws SQLException {
         appointmentsTableView.getItems().clear();
-        AppointmentsDAO.setAllAppointments();
+        if (AppointmentsDAO.getAllAppointments().isEmpty())
+            AppointmentsDAO.setAllAppointments();
         appointmentsTableView.setItems(AppointmentsDAO.getAllAppointments());
         appointmentsTableView.refresh();
     }
@@ -148,20 +153,27 @@ public class AppointmentCont implements Initializable {
 
     @FXML
     void addAction(ActionEvent event) throws SQLException {
+        ZoneId eastId = ZoneId.of("America/New_York");
+        ZoneId localId = ZonedDateTime.now().getZone();
+
         String title = titleTxt.getText();
         String description = descriptionTxt.getText();
         String location = locationTxt.getText();
         String type = typeTxt.getText();
-        LocalDateTime start = LocalDateTime.parse(startTxt.getText());
-        LocalDateTime end = LocalDateTime.parse(endTxt.getText());
+        LocalDateTime startLDT = LocalDateTime.parse(startTxt.getText());
+        LocalDateTime endLDT = LocalDateTime.parse(endTxt.getText());
+        ZonedDateTime start = startLDT.atZone(localId);
+        ZonedDateTime end = endLDT.atZone(localId);
         int customerId = Integer.parseInt(customerIdTxt.getText());
         int userId = Integer.parseInt(userIdTxt.getText());
         int contactId = selectedContact.getContactId();
 
-        if (start.getHour() < 8 || start.getHour() > 22 || end.getHour() < 8 || end.getHour() > 22) {
+        /*
+        if (start.withZoneSameInstant(eastId).getHour() < 8 || start.withZoneSameInstant(eastId).getHour() > 22 || end.withZoneSameInstant(eastId).getHour() < 8 || end.withZoneSameInstant(eastId).getHour() > 22) {
             alertInfo("Error", "Business hours are between 0800 and 2200", "Please schedule an appointment within business hours");
             return;
         }
+        */
         if (start.isAfter(end)){
             alertInfo("Error", "Start time is after the end time.", "Please enter a start time before the end time");
             return;
@@ -169,8 +181,8 @@ public class AppointmentCont implements Initializable {
 
         for (Appointments thisAppointment : AppointmentsDAO.getAllAppointments()){
             if (thisAppointment.getCustomerId() == customerId){
-                LocalDateTime existingStart = thisAppointment.getStart();
-                LocalDateTime existingEnd = thisAppointment.getEnd();
+                ZonedDateTime existingStart = thisAppointment.getStart();
+                ZonedDateTime existingEnd = thisAppointment.getEnd();
 
                 if (start.isBefore(existingEnd) && end.isAfter(existingStart)){
                     alertInfo("Error", "This appointment overlaps for this customer", "Please input a non overlapping time for this appointment.");
@@ -232,21 +244,28 @@ public class AppointmentCont implements Initializable {
 
     @FXML
     void updateAction(ActionEvent event) throws SQLException{
+        ZoneId eastId = ZoneId.of("America/New_York");
+        ZoneId localId = ZonedDateTime.now().getZone();
+
         int appointmentId = Integer.parseInt(appointmentIdTxt.getText());
         String title = titleTxt.getText();
         String description = descriptionTxt.getText();
         String location = locationTxt.getText();
         String type = typeTxt.getText();
-        LocalDateTime start = LocalDateTime.parse(startTxt.getText());
-        LocalDateTime end = LocalDateTime.parse(endTxt.getText());
+        LocalDateTime startLDT = LocalDateTime.parse(startTxt.getText());
+        LocalDateTime endLDT = LocalDateTime.parse(endTxt.getText());
+        ZonedDateTime start = startLDT.atZone(localId);
+        ZonedDateTime end = endLDT.atZone(localId);
         int customerId = Integer.parseInt(customerIdTxt.getText());
         int userId = Integer.parseInt(userIdTxt.getText());
         int contactId = selectedContact.getContactId();
 
-        if (start.getHour() < 8 || start.getHour() > 22 || end.getHour() < 8 || end.getHour() > 22) {
-            alertInfo("Error", "Business hours are between 0800 and 2200", "Please schedule an appointment within business hours");
+        /*
+        if (start.withZoneSameInstant(eastId).getHour() < 8 || start.withZoneSameInstant(eastId).getHour() > 22 || end.withZoneSameInstant(eastId).getHour() < 8 || end.withZoneSameInstant(eastId).getHour() > 22) {
+            alertInfo("Error", "Business hours are between 0800 and 2200 Eastern Standard Time", "Please schedule an appointment within business hours");
             return;
         }
+        */
         if (start.isAfter(end)){
             alertInfo("Error", "Start time is after the end time.", "Please enter a start time before the end time");
             return;
@@ -254,8 +273,8 @@ public class AppointmentCont implements Initializable {
 
         for (Appointments thisAppointment : AppointmentsDAO.getAllAppointments()){
             if (thisAppointment.getCustomerId() == customerId){
-                LocalDateTime existingStart = thisAppointment.getStart();
-                LocalDateTime existingEnd = thisAppointment.getEnd();
+                ZonedDateTime existingStart = thisAppointment.getStart();
+                ZonedDateTime existingEnd = thisAppointment.getEnd();
 
                 if ((start.isBefore(existingEnd) && end.isAfter(existingStart)) && thisAppointment.getAppointmentId() != appointmentId){
                     alertInfo("Error", "This appointment overlaps for this customer", "Please input a non overlapping time for this appointment.");
@@ -286,15 +305,14 @@ public class AppointmentCont implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         try {
-            AppointmentsDAO.setAllAppointments();
             ContactsDAO.setAllContacts();
             ContactsDAO.setAllContactIds();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
+        appointmentsTableView.getItems().clear();
         setContactCB();
         appointmentsTableView.setItems(AppointmentsDAO.getAllAppointments());
 
@@ -316,8 +334,8 @@ public class AppointmentCont implements Initializable {
                 descriptionTxt.setText(String.valueOf(newSelection.getDescription()));
                 locationTxt.setText(String.valueOf(newSelection.getLocation()));
                 typeTxt.setText(String.valueOf(newSelection.getType()));
-                startTxt.setText(String.valueOf(newSelection.getStart()));
-                endTxt.setText(String.valueOf(newSelection.getEnd()));
+                startTxt.setText(String.valueOf(newSelection.getStart().toLocalDateTime()));
+                endTxt.setText(String.valueOf(newSelection.getEnd().toLocalDateTime()));
                 customerIdTxt.setText(String.valueOf(newSelection.getCustomerId()));
                 userIdTxt.setText(String.valueOf(newSelection.getUserId()));
                 for (Contacts thisContact : ContactsDAO.getAllContacts()){
@@ -341,6 +359,4 @@ public class AppointmentCont implements Initializable {
             }
         });
     }
-
-
 }

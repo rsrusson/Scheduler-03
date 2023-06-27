@@ -44,19 +44,23 @@ public class MenuCont implements Initializable {
         }
 
         ZonedDateTime myZDT = ZonedDateTime.now();
+        ZonedDateTime fifteenMinutesLater = myZDT.plusMinutes(15);
         ZoneId myZID = ZonedDateTime.now().getZone();
         ZoneId estZID = ZoneId.of("America/New_York");
-        ZonedDateTime fifteenMinutesLater = myZDT.plusMinutes(15);
 
-        System.out.println(myZDT);
-        System.out.println(myZDT.toInstant());
+        boolean closeAppointment = false;
 
         for (Appointments appointment : AppointmentsDAO.getAllAppointments()){
-            if (appointment.getStart().atZone(myZID).isAfter(myZDT) && appointment.getStart().atZone(myZID).isBefore(fifteenMinutesLater)) {
-                alertInfo("Warning", "There is an appointment in 15 minutes or less", "Please prepare for the appointment");
+            if ((appointment.getStart().toLocalDateTime().isEqual(myZDT.toLocalDateTime()) ||
+                    appointment.getStart().toLocalDateTime().isAfter(myZDT.toLocalDateTime())) &&
+                    appointment.getStart().toLocalDateTime().isBefore(fifteenMinutesLater.toLocalDateTime())) {
+                closeAppointment = true;
+                alertInfo("Warning", "There is an appointment in 15 minutes or less", "ID: " + String.valueOf(appointment.getAppointmentId()) + " " + "Hour: " + String.valueOf(appointment.getStart().getHour()) + " " + "Minute: " + String.valueOf(appointment.getStart().getMinute()));
                 break;
             }
         }
+        if (!closeAppointment)
+        alertInfo("Notice", "There are no upcoming appointments", "Enjoy your free time!");
     }
 
     static void alertInfo(String title, String headerText, String contentText){
