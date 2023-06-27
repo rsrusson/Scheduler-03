@@ -95,7 +95,5 @@ public class CustomersDAO {
         preparedStatement.setInt(6, updatedCustomer.getDivisionId());
         preparedStatement.setInt(7, updatedCustomer.getCustomerId());
         preparedStatement.executeUpdate();
-
-        System.out.println(preparedStatement.toString());
     }
 }

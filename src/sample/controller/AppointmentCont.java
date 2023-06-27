@@ -365,6 +365,8 @@ public class AppointmentCont implements Initializable {
 
     /**
      * Initializes the appointment management screen.
+     * Using a lambda this method effectively cuts down the amount of code needed for its function.
+     * The lambda implements the ability of the listener to select Appointments objects.
      * Retrieves and sets all available contacts and contact IDs.
      *
      * @param url             the location used to resolve relative paths
